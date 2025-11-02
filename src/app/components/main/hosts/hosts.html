@@ -1,0 +1,28 @@
+
+<mat-tab-group (selectedTabChange)="loadAllData($event.tab.textLabel.toLowerCase())">
+<mat-tab label="PLTCM">
+    <app-hosts-table [hostsData]="hostsData"></app-hosts-table>
+</mat-tab>
+<mat-tab label="CALCGL">
+    <app-hosts-table [hostsData]="hostsData"></app-hosts-table>
+</mat-tab>
+<mat-tab label="CGL">
+    <app-hosts-table [hostsData]="hostsData"></app-hosts-table>
+</mat-tab>
+<mat-tab label="CGL3">
+    <app-hosts-table [hostsData]="hostsData"></app-hosts-table>
+</mat-tab>
+<mat-tab label="RCL">
+    <app-hosts-table [hostsData]="hostsData"></app-hosts-table>
+</mat-tab>
+<mat-tab label="CPL">
+    <app-hosts-table [hostsData]="hostsData"></app-hosts-table>
+</mat-tab>
+<!-- <mat-tab label="ARP, CAS, EDS, WWNP, HGP">Content 7</mat-tab> -->
+<mat-tab label="General">
+    <app-hosts-table [hostsData]="hostsData"></app-hosts-table></mat-tab>
+</mat-tab-group>
+
+
+<!-- <mat-icon>thumb_up</mat-icon> -->
+<!-- <button mat-raised-button color="primary" class="button1">Нажми</button> -->

@@ -1,0 +1,24 @@
+
+  
+  <div class="app">
+  <div class="main-container">
+    <!-- Левая колонка — Sidebar -->
+    <aside class="sidebar" [class.collapsed]="sidebarCollapsed">
+      <app-sidebar (sidebarToggled)="onSidebarToggled($event)"></app-sidebar>
+    </aside>
+
+    <!-- Правая колонка — Header + Main -->
+    <div class="right-column">
+      <header class="header">
+        <app-header></app-header>
+      </header>
+      <main class="main-content">
+        <app-main>
+          <router-outlet></router-outlet>
+        </app-main>
+      </main>
+    </div>
+  </div>
+</div>
+
+

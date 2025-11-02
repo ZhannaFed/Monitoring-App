@@ -1,0 +1,24 @@
+<!-- <p>host works!</p>
+<p><b>Host ID</b>{{diskSpace?.[0]?.hostid}}</p>
+<p ><b>{{diskSpace?.[0]?.name}}:</b>{{diskSpace?.[0]?.lastvalue}}</p> -->
+
+
+<table>
+    <thead>
+        <tr>
+             <th>Host ID</th>
+            <th>Space</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let el of diskSpace">
+            <td>{{el.hostid}}</td>
+            <td><b>{{el.name}}: </b>{{el.lastvalue | bytesToGb}}</td>
+        </tr>
+    </tbody>
+</table>
+
+<p><b>CPU utilization:  </b>{{cpuUtil?.[0]?.lastvalue | number: '1.1-1'}}%</p>
+<p><b>Memory utilization:  </b>{{memoryUtil?.[0]?.lastvalue | number: '1.1-1'}}%</p>
+<p><b>System Info: </b>{{opSystemInfo?.[0]?.lastvalue}}</p>
+<p><b>Hostname: </b>{{hostname?.[0]?.lastvalue}}</p>

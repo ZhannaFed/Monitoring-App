@@ -1,0 +1,94 @@
+<!-- <table mat-table [dataSource]="hostsData"> -->
+<!-- HostId Column -->
+<!-- <ng-container matColumnDef="hostId">
+    <th mat-header-cell *matHeaderCellDef>Host ID</th>
+    <td mat-cell *matCellDef="let host">{{host.hostid}}</td>
+</ng-container> -->
+
+<!-- HostName Column -->
+<!-- <ng-container matColumnDef="hostName">
+    <th mat-header-cell *matHeaderCellDef>Host Name</th>
+    <td mat-cell *matCellDef="let host"><a [routerLink]="['/host', host.hostid]">{{host.host}}</a></td>
+</ng-container> -->
+
+<!-- HostIP Column -->
+<!-- <ng-container matColumnDef="hostIp">
+    <th mat-header-cell *matHeaderCellDef>Host IP</th>
+    <td mat-cell *matCellDef="let host">{{host.interfaces[0].ip}}</td>
+</ng-container> -->
+
+<!-- Status Column -->
+<!-- <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef>Status</th>
+    <td mat-cell *matCellDef="let host"><div *ngIf="host.isAvailable == true; else hostNotAlive" class="host_aliveTrue"></div></td>
+</ng-container> -->
+
+<!-- Description Column -->
+<!-- <ng-container matColumnDef="description">
+    <th mat-header-cell *matHeaderCellDef>Description</th>
+    <td mat-cell *matCellDef="let host">{{host.description}}</td>
+</ng-container> -->
+
+<!-- Remote Access Column -->
+<!-- <ng-container matColumnDef="remoteAccess">
+    <th mat-header-cell *matHeaderCellDef>Remote Access</th>
+    <td mat-cell *matCellDef="let host"><a [href]="'vnc://'">VNC</a>&nbsp; &nbsp;<a href="#">Lite Manager</a></td>
+</ng-container> -->
+
+<!-- <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+</table>  -->
+
+<!-- <ng-template #hostNotAlive>
+    <div class="host_aliveFalse"></div>
+</ng-template> -->
+
+
+
+<div class="hosts-container">
+  <div class="host-card" *ngFor="let host of hostsData" [routerLink]="['/host', host.hostid]">
+    <div class="host-header">
+      <div>
+        <a [routerLink]="['/host', host.hostid]" class="host-name">{{ host.host }}</a>
+        <div class="host-id">ID: {{ host.hostid }}</div>
+      </div>
+      <div 
+        class="status-indicator" 
+        [class.status-online]="host.isAvailable"
+        [class.status-offline]="!host.isAvailable">
+      </div>
+    </div>
+    
+    <div class="host-details">
+      <div class="detail-row">
+        <!-- <span class="detail-label">IP Address:</span> -->
+        <div class="detail-value">
+          <span class="ip-address">
+            <span class="material-icons">dns</span>
+            {{ host.interfaces[0]?.ip || 'N/A' }}
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    <div class="host-description">
+      {{ host.description }}
+    </div>
+    
+    <div class="remote-access">
+      <a [href]="'vnc://' + (host.interfaces[0]?.ip || '')" class="access-link">
+        <span class="material-icons">desktop_windows</span>
+        VNC
+      </a>
+      <a href="#" class="access-link">
+        <span class="material-icons">settings_remote</span>
+        Lite Manager
+      </a>
+    </div>
+  </div>
+</div>
+
+<ng-template #hostNotAlive>
+  <div class="host_aliveFalse"></div>
+</ng-template>

@@ -1,0 +1,354 @@
+
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+@import 'material-icons/iconfont/material-icons.css';
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+:root {
+  --bg-body:      #212121;
+  --bg-header:    #3949ab;
+  --bg-sidebar:   #303030;
+  --bg-main:      #282828;
+  --text-primary:   #eeeeee;
+  --text-secondary: #bbbbbb;
+  --border-color:   #555555;
+}
+// === СВЕТЛАЯ ТЕМА ===
+.light-theme {
+  --bg-body: #ffffff;
+  --bg-header: #3f51b5;
+  --bg-sidebar: #f5f5f5;
+  --bg-main: #f8f9fa;
+  --text-primary: rgba(0, 0, 0, 0.87);
+  --text-secondary: rgba(0, 0, 0, 0.6);
+  --border-color: #e0e0e0;
+}
+
+// === Применяем переменные глобально ===
+body {
+  background: var(--bg-body);
+  color: var(--text-primary);
+}
+
+
+// //Стили для табов в стиле sidebar
+// mat-tab-group {
+//   background: var(--bg-main);
+//   border-radius: 8px;
+//   overflow: hidden;
+//   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+// }
+
+// mat-tab-header {
+//   background: var(--bg-sidebar) !important; // Используем цвет sidebar
+//   border-bottom: 2px solid var(--border-color);
+//   padding: 0 8px;
+// }
+
+// mat-tab-label {
+//   position: relative;
+//   overflow: hidden;
+//   color: var(--text-secondary) !important;
+//   opacity: 1 !important;
+//   font-weight: 500;
+//   min-width: 120px !important;
+//   height: 48px !important;
+//   background: transparent !important;
+//   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+//   border-radius: 8px 8px 0 0;
+//   margin: 0 2px;
+  
+//   &::before {
+//     content: '';
+//     position: absolute;
+//     left: 0;
+//     top: 0;
+//     width: 100%;
+//     height: 100%;
+//     background: rgba(255, 255, 255, 0.05);
+//     transform: translateX(-100%);
+//     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+//     border-radius: 8px 8px 0 0;
+//     z-index: 0;
+//   }
+  
+//   &:hover {
+//     color: var(--text-primary) !important;
+    
+//     &::before {
+//       transform: translateX(0);
+//     }
+//   }
+// }
+
+// mat-tab-label-active {
+//   color: var(--text-primary) !important;
+//   background: rgba(255, 255, 255, 0.08) !important;
+//   font-weight: 600;
+  
+//   &::before {
+//     transform: translateX(0);
+//     background: rgba(255, 255, 255, 0.1);
+//   }
+// }
+
+// mat-ink-bar {
+//   background-color: #7986cb !important; // Цвет как в active состоянии sidebar
+//   height: 3px !important;
+//   border-radius: 2px 2px 0 0;
+// }
+
+// mat-tab-body-wrapper {
+//   background: var(--bg-main);
+//   border-radius: 0 0 8px 8px;
+// }
+
+// // Контент табов
+// mat-tab-body {
+//   padding: 0;
+// }
+
+// mat-tab-body-content {
+//   overflow: hidden !important;
+//   padding: 0;
+// }
+
+// // Пагинация
+// mat-tab-header-pagination {
+//   background: transparent;
+//   border: none;
+//   border-radius: 50%;
+//   margin: 4px;
+//   transition: background 0.2s ease;
+  
+//   &:hover {
+//     background: rgba(255, 255, 255, 0.1);
+//   }
+// }
+
+// mat-tab-header-pagination-chevron {
+//   border-color: var(--text-secondary);
+// }
+
+// // Акцентная полоска как в navigation-item::after
+// mat-tab-label-active {
+//   &::after {
+//     content: '';
+//     position: absolute;
+//     right: 8px;
+//     top: 50%;
+//     transform: translateY(-50%) scaleX(1);
+//     width: 3px;
+//     height: 20px;
+//     background: #7986cb;
+//     border-radius: 2px;
+//     z-index: 1;
+//   }
+// }
+
+// // Светлая тема для табов
+// light-theme {
+//   mat-tab-header {
+//     background: var(--bg-sidebar) !important;
+//   }
+
+//   mat-tab-label {
+//     color: var(--text-secondary) !important;
+    
+//     &::before {
+//       background: rgba(0, 0, 0, 0.05);
+//     }
+    
+//     &:hover {
+//       color: var(--text-primary) !important;
+//     }
+//   }
+
+//   mat-tab-label-active {
+//     color: var(--text-primary) !important;
+//     background: rgba(0, 0, 0, 0.08) !important;
+    
+//     &::before {
+//       background: rgba(0, 0, 0, 0.1);
+//     }
+//   }
+
+//   mat-ink-bar {
+//     background-color: #3f51b5 !important;
+//   }
+
+//   mat-tab-label-active::after {
+//     background: #3f51b5;
+//   }
+// }
+
+
+// Стили для табов в стиле sidebar
+mat-tab-group {
+  background: var(--bg-main);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  
+  // CSS переменные для цвета текста
+
+// CSS переменные для цвета текста согласно sidebar
+// --mat-tab-active-label-text-color: var(--text-primary) !important;
+// --mat-tab-inactive-label-text-color: var(--text-secondary) !important;
+// --mat-tab-active-focus-label-text-color: var(--text-primary) !important;
+// --mat-tab-active-hover-label-text-color: var(--text-primary) !important;
+--mat-tab-active-label-text-color: #7986cb !important; // Синий как в sidebar active
+--mat-tab-inactive-label-text-color: var(--text-secondary) !important;
+--mat-tab-active-focus-label-text-color: #7986cb !important;
+--mat-tab-active-hover-label-text-color: #7986cb !important;
+--mat-tab-inactive-hover-label-text-color: #7986cb !important; 
+
+// --mat-tab-active-focus-indicator-color: #7986cb !important; 
+}
+
+mat-tab-header {
+  background: var(--bg-sidebar);
+  border-bottom: 2px solid var(--border-color);
+  padding: 0 8px;
+}
+
+mat-tab-label {
+  position: relative;
+  overflow: hidden;
+  opacity: 1;
+  font-weight: 500;
+  min-width: 120px;
+  height: 48px;
+  background: transparent;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 8px 8px 0 0;
+  margin: 0 2px;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateX(-100%);
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px 8px 0 0;
+    z-index: 0;
+  }
+  
+  &:hover {
+    &::before {
+      transform: translateX(0);
+    }
+  }
+}
+
+mat-tab-label-active {
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+  
+  &::before {
+    transform: translateX(0);
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+mat-ink-bar {
+  background-color: #7986cb;
+  height: 3px;
+  border-radius: 2px 2px 0 0;
+}
+
+mat-tab-body-wrapper {
+  background: var(--bg-main);
+  border-radius: 0 0 8px 8px;
+}
+
+// Контент табов
+mat-tab-body {
+  padding: 0;
+}
+
+mat-tab-body-content {
+  overflow: hidden;
+  padding: 0;
+}
+
+// Пагинация
+mat-tab-header-pagination {
+  background: transparent;
+  border: none;
+  border-radius: 50%;
+  margin: 4px;
+  transition: background 0.2s ease;
+  
+  &:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+
+mat-tab-header-pagination-chevron {
+  border-color: #bbbbbb;
+}
+
+// Акцентная полоска как в navigation-item::after
+mat-tab-label-active {
+  &::after {
+    content: '';
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%) scaleX(1);
+    width: 3px;
+    height: 20px;
+    background: #7986cb;
+    border-radius: 2px;
+    z-index: 1;
+  }
+}
+
+// // Светлая тема для табов
+// light-theme {
+//   mat-tab-group {
+//     --mat-tab-active-label-text-color: #000000;
+//     --mat-tab-inactive-label-text-color: #666666;
+//     --mat-tab-active-focus-label-text-color: #000000;
+//     --mat-tab-active-hover-label-text-color: #000000;
+//   }
+  
+//   mat-tab-header {
+//     background: var(--bg-sidebar);
+//   }
+
+//   mat-tab-label {
+//     &::before {
+//       background: rgba(0, 0, 0, 0.05);
+//     }
+//   }
+
+//   mat-tab-label-active {
+//     background: rgba(0, 0, 0, 0.08);
+    
+//     &::before {
+//       background: rgba(0, 0, 0, 0.1);
+//     }
+//   }
+
+//   mat-ink-bar {
+//     background-color: #3f51b5;
+//   }
+
+//   mat-tab-label-active::after {
+//     background: #3f51b5;
+//   }
+  
+//   mat-tab-header-pagination-chevron {
+//     border-color: #666666;
+//   }
+// }
+
+
