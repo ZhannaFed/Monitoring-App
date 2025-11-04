@@ -1,17 +1,19 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ZabbixService } from '../../../services/zabbix.service';
 import { forkJoin } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { BytesToGbPipe } from "../../../pipes/bytes-to-gb.pipe";
+import { MatIcon } from "@angular/material/icon";
 
 @Component({
   selector: 'app-host',
-  imports: [CommonModule, BytesToGbPipe],
+  imports: [CommonModule, BytesToGbPipe, MatIcon],
   templateUrl: './host.html',
   styleUrl: './host.scss'
 })
 export class Host implements OnInit{
+
   Math=Math;
 
   id: any;
@@ -23,6 +25,7 @@ export class Host implements OnInit{
  
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private zabbixService: ZabbixService
   ){}
 
@@ -33,6 +36,10 @@ export class Host implements OnInit{
       this.getAllData();
     })
   }
+
+  goBack() {
+  this.router.navigate(['/hosts']);
+}
 
   getHostDiskSpaceInfo(){
     return this.zabbixService.getDiskSpaceInfo(this.id);
