@@ -1,1 +1,135 @@
-<p>instructions works!</p>
+<div class="instructions">
+    <section class="instructions__tree">
+        <header class="instructions__header">
+            <h2 class="instructions__title">Инструкции</h2>
+            <button type="button" class="instructions__button" (click)="reload()" [disabled]="loading()"
+                aria-label="Обновить список инструкций">
+                Обновить
+            </button>
+        </header>
+
+        <div class="instructions__state" *ngIf="loading()">
+            Загрузка списка файлов...
+        </div>
+
+        <div class="instructions__state instructions__state--error" *ngIf="!loading() && error() as err">
+            <p>{{ err }}</p>
+            <button type="button" class="instructions__button" (click)="reload()">
+                Повторить
+            </button>
+        </div>
+
+        <ng-container *ngIf="!loading() && !error()">
+            <ul class="tree" *ngIf="hasItems(); else emptyState">
+                <ng-container *ngFor="let node of tree(); trackBy: trackByPath">
+                    <ng-container *ngTemplateOutlet="treeNode; context: { $implicit: node }"></ng-container>
+                </ng-container>
+            </ul>
+        </ng-container>
+
+        <ng-template #emptyState>
+            <div class="instructions__state instructions__state--empty">
+                Нет доступных файлов.
+            </div>
+        </ng-template>
+
+        <ng-template #treeNode let-node>
+            <li class="tree__node" [class.tree__node--folder]="node.type === 'folder'"
+                [class.tree__node--file]="node.type === 'file'" [class.tree__node--expanded]="isExpanded(node)"
+                [class.tree__node--selected]="isSelected(node)">
+                <div class="tree__item" (click)="handleNodeClick(node, $event)">
+                    <button *ngIf="node.type === 'folder'" class="tree__toggle" type="button"
+                        (click)="onToggleIconClick(node, $event)"
+                        [attr.aria-label]="isExpanded(node) ? 'Свернуть папку' : 'Развернуть папку'"></button>
+                    <span *ngIf="node.type === 'file'" class="tree__spacer" aria-hidden="true"></span>
+                    <span class="tree__icon" [attr.data-type]="node.type"></span>
+                    <span class="tree__label" [title]="node.name">{{ node.name }}</span>
+                </div>
+
+                <ul class="tree__children" *ngIf="node.children?.length && isExpanded(node)">
+                    <ng-container *ngFor="let child of node.children; trackBy: trackByPath">
+                        <ng-container *ngTemplateOutlet="treeNode; context: { $implicit: child }"></ng-container>
+                    </ng-container>
+                </ul>
+            </li>
+        </ng-template>
+    </section>
+
+    <section class="instructions__preview">
+        <ng-container *ngIf="selected() as active; else previewHint">
+            <header class="preview__header">
+                <div class="preview__meta">
+                    <div class="preview__name" [title]="active.name">
+                        {{ active.name }}
+                    </div>
+                    <div class="preview__details">
+                        <span *ngIf="formatSize(active.size) as size">Размер: {{ size }}</span>
+                        <span *ngIf="active.mime">Тип: {{ active.mime }}</span>
+                    </div>
+                </div>
+                <div class="preview__actions" *ngIf="getSelectedDownloadUrl() as downloadUrl">
+                    <a class="instructions__button" [href]="downloadUrl" target="_blank" rel="noopener">
+                        Открыть файл
+                    </a>
+                </div>
+            </header>
+
+            <div class="preview__body" *ngIf="previewState() as state" [attr.data-kind]="state.kind">
+                <div *ngIf="isLoadingState(state)" class="preview__placeholder">
+                    <p>{{ state.message }}</p>
+                </div>
+
+                <div *ngIf="isTextState(state)" class="preview__text">
+                    <pre>{{ state.content }}</pre>
+                </div>
+
+                <div *ngIf="isHtmlState(state)" class="preview__html">
+                    <div [innerHTML]="state.content"></div>
+                </div>
+
+                <div *ngIf="isImageState(state)" class="preview__image">
+                    <img [src]="state.url" [alt]="state.alt" />
+                </div>
+
+                <div *ngIf="isIframeState(state)" class="preview__frame-wrapper">
+                    <iframe [src]="state.url" title="Предпросмотр файла"></iframe>
+                </div>
+
+                <div *ngIf="isViewerState(state)" class="preview__doc-viewer">
+                    <ngx-doc-viewer [url]="state.url" [viewer]="state.viewer"></ngx-doc-viewer>
+                    <p class="preview__note" *ngIf="state.note">{{ state.note }}</p>
+                </div>
+
+                <div *ngIf="isMessageState(state)" class="preview__placeholder">
+                    <p>{{ state.message }}</p>
+                    <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl" target="_blank"
+                        rel="noopener">
+                        Скачать файл
+                    </a>
+                    <a *ngIf="state.extraLink" class="instructions__button" [href]="state.extraLink.url" target="_blank"
+                        rel="noopener">
+                        {{ state.extraLink.label }}
+                    </a>
+                </div>
+
+                <div *ngIf="isErrorState(state)" class="preview__placeholder">
+                    <p>{{ state.message }}</p>
+                    <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl" target="_blank"
+                        rel="noopener">
+                        Скачать файл
+                    </a>
+                </div>
+
+                <div *ngIf="isIdleState(state)" class="preview__placeholder">
+                    <p>Выберите файл слева, чтобы увидеть содержимое.</p>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #previewHint>
+            <div class="preview__placeholder">
+                <p>Выберите файл слева, чтобы открыть предпросмотр.</p>
+            </div>
+        </ng-template>
+    </section>
+</div>

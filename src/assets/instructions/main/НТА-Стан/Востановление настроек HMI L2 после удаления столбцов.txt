@@ -1,0 +1,3 @@
+Если враги удалили столбец в L2 HMI - в отместку нужно удалить файл конфигурации:
+
+C:\Documents and Settings\  !!!!ПОЛЬЗОВАТЕЛЬ!!! \Local Settings\Application Data\L2HMI\production_schedule_layout.xml

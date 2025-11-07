@@ -28,11 +28,15 @@
     "@angular/material": "^20.0.5",
     "@angular/platform-browser": "^20.0.0",
     "@angular/router": "^20.0.0",
+    "mammoth": "^1.11.0",
     "material-icons": "^1.13.14",
+    "mime-types": "^2.1.35",
+    "ngx-doc-viewer": "^15.0.1",
     "novnc": "^1.2.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "websockify": "^0.7.1",
+    "xlsx": "^0.18.5",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
