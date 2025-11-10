@@ -1,38 +1,35 @@
-
-
 <div class="sidebar-wrapper" [class.collapsed]="isCollapsed">
-  <!-- Кнопка: menu (свёрнуто) / close (развёрнуто) -->
-  <button class="toggle-button" (click)="toggleSidebar()">
-    <!-- Динамический выбор шаблона через ngIf -->
-    <ng-container *ngIf="isCollapsed; then menuTmpl; else closeTmpl"></ng-container>
+  <button class="toggle-button" type="button" (click)="toggleSidebar()">
+    <mat-icon class="toggle-icon">{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
   </button>
 
-  <!-- Навигация -->
   <nav class="sidebar-navigation">
-    <a routerLink="/hosts" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" class="navigation-item">
-      <mat-icon>storage</mat-icon>
+    <a
+      routerLink="/hosts"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      class="navigation-item"
+    >
+      <mat-icon class="navigation-icon">storage</mat-icon>
       <span class="navigation-label">Хосты</span>
     </a>
 
     <a routerLink="/instructions" routerLinkActive="active" class="navigation-item">
-      <mat-icon>description</mat-icon>
+      <mat-icon class="navigation-icon">description</mat-icon>
       <span class="navigation-label">Инструкции</span>
     </a>
 
-    <a routerLink="/networks" routerLinkActive="active" class="navigation-item">
-      <mat-icon>device_hub</mat-icon>
+    <div class="section-divider">
+      <div class="section-header">
+        <mat-icon class="section-icon">link</mat-icon>
+        <span class="section-title">Полезные ссылки</span>
+      </div>
+      <span class="section-line"></span>
+    </div>
+
+    <button type="button" class="navigation-item" (click)="openNetworksDialog()">
+      <mat-icon class="navigation-icon">device_hub</mat-icon>
       <span class="navigation-label">Сети</span>
-    </a>
+    </button>
   </nav>
-
-  <!-- Шаблоны иконок -->
-  <ng-template #menuTmpl>
-    <!-- <mat-icon class="toggle-icon">menu</mat-icon> -->
-    <mat-icon class="toggle-icon">keyboard_double_arrow_right</mat-icon>
-  </ng-template>
-
-  <ng-template #closeTmpl>
-    <!-- <mat-icon class="toggle-icon">close</mat-icon> -->
-    <mat-icon class="toggle-icon">keyboard_double_arrow_left</mat-icon>
-  </ng-template>
 </div>
