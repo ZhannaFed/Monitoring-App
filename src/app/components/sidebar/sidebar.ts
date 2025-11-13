@@ -40,7 +40,7 @@ export class Sidebar {
 
     dialogRef.afterClosed().subscribe((confirmed) => {
       if (confirmed) {
-        window.open('http://172.30.50.100', '_blank');
+        window.open('http://172.30.50.100/ip', '_blank');
       }
     });
   }
