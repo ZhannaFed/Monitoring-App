@@ -47,10 +47,11 @@
 
 
 <div class="hosts-container">
-  <div class="host-card" *ngFor="let host of hostsData" [routerLink]="['/host', host.hostid]">
+  <!-- <div class="host-card" *ngFor="let host of hostsData" [routerLink]="['/host', host.hostid]"> -->
+     <div class="host-card" *ngFor="let host of hostsData" (click)="navigateToHost(host.hostid,host.host, host.interfaces[0]?.ip, host.description)">
     <div class="host-header">
       <div>
-        <a [routerLink]="['/host', host.hostid]" class="host-name">{{ host.host }}</a>
+        <a class="host-name">{{ host.host }}</a>
         <div class="host-id">ID: {{ host.hostid }}</div>
       </div>
       <div 

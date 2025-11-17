@@ -29,57 +29,57 @@ constructor(private zabbixService: ZabbixService){}
   
 ngOnInit(): void {
     
-  //////--Test 
-  // this.loadAllData(this.group);
+  this.loadAllData(this.group);
 
-  this.hostsData = [
-    {
-      hostid: '1373778',
-      host: 'CALHMISRV3',
-      interfaces:[
-        {ip: '172.30.50.120'}
-      ],
-      isAvailable: true,
-      description: 'dygdyuduu'
-    },
-    {
-      hostid: '2373778',
-      host: 'CGLHMISRV3',
-      interfaces:[
-        {ip: '172.30.50.121'}
-      ],
-      isAvailable: true,
-      description: 'dygdyuduu'
-    },
-    {
-      hostid: '3373778',
-      host: 'gyugdyudg',
-      interfaces:[
-        {ip: '172.40.50.121'}
-      ],
-      isAvailable: true,
-      description: 'dygdyuduu'
-    },
-    {
-      hostid: '4373778',
-      host: 'gyugdyudg',
-      interfaces:[
-        {ip: '172.40.50.122'}
-      ],
-      isAvailable: false,
-      description: 'dygdyuduu'
-    },
-    {
-      hostid: '5373778',
-      host: 'gyugdyudg',
-      interfaces:[
-        {ip: '172.40.50.120'}
-      ],
-      isAvailable: true,
-      description: 'dygdyuduu'
-    },
-  ]
-    
+  //////--Test--------------------------------------------------------- 
+  // this.hostsData = [
+  //   {
+  //     hostid: '1373778',
+  //     host: 'CALHMISRV3',
+  //     interfaces:[
+  //       {ip: '172.30.50.120'}
+  //     ],
+  //     isAvailable: true,
+  //     description: 'dygdyuduu'
+  //   },
+  //   {
+  //     hostid: '2373778',
+  //     host: 'CGLHMISRV3',
+  //     interfaces:[
+  //       {ip: '172.30.50.121'}
+  //     ],
+  //     isAvailable: true,
+  //     description: 'dygdyuduu'
+  //   },
+  //   {
+  //     hostid: '3373778',
+  //     host: 'gyugdyudg',
+  //     interfaces:[
+  //       {ip: '172.40.50.121'}
+  //     ],
+  //     isAvailable: true,
+  //     description: 'dygdyuduu'
+  //   },
+  //   {
+  //     hostid: '4373778',
+  //     host: 'gyugdyudg',
+  //     interfaces:[
+  //       {ip: '172.40.50.122'}
+  //     ],
+  //     isAvailable: false,
+  //     description: 'dygdyuduu'
+  //   },
+  //   {
+  //     hostid: '5373778',
+  //     host: 'gyugdyudg',
+  //     interfaces:[
+  //       {ip: '172.40.50.120'}
+  //     ],
+  //     isAvailable: true,
+  //     description: 'dygdyuduu'
+  //   },
+  // ]
+   ///------------------------------------------- 
     
     
     //-------------------Refreshing of component hosts---------------------//
@@ -106,24 +106,24 @@ ngOnInit(): void {
     return this.zabbixService.pingAgentsForGroup(hostIds);
   }
  
-  loadAllData1(group:string){
-    this.group = group;
-    forkJoin({
-      hosts: this.getHostsByGroup(group),
-      pings: this.pingAllHosts()
-    }).subscribe({
-      next:({hosts,pings})=>{
-        this.hosts = hosts.result;
-        this.pings = pings.result;
-        console.log("Hosts data",this.hosts);
-        console.log("Pings data",this.pings)
-         this.processData();
-      },
-      error :(error) =>{
-        console.error('Error loading data:', error);
-      }
-    });
-  }
+  // loadAllData1(group:string){
+  //   this.group = group;
+  //   forkJoin({
+  //     hosts: this.getHostsByGroup(group),
+  //     pings: this.pingAllHosts()
+  //   }).subscribe({
+  //     next:({hosts,pings})=>{
+  //       this.hosts = hosts.result;
+  //       this.pings = pings.result;
+  //       console.log("Hosts data",this.hosts);
+  //       console.log("Pings data",this.pings)
+  //        this.processData();
+  //     },
+  //     error :(error) =>{
+  //       console.error('Error loading data:', error);
+  //     }
+  //   });
+  // }
 
    loadAllData(group:string){
     this.group = group;
@@ -166,7 +166,7 @@ ngOnInit(): void {
     const pingsIsAvailableMap = new Map();
     for (const val of this.pings){
       let isOk;
-      isOk = (currentTime - val.lastclock) < 60 ? true : false 
+      isOk = (currentTime - val.lastclock) < 100 ? true : false 
       pingsIsAvailableMap.set(val.hostid, isOk);
     }
       // console.log(pingsIsAvailableMap) 
@@ -180,7 +180,7 @@ ngOnInit(): void {
     }));
 
     
-    console.log(this.hostsData);
+    console.log("Hosts Full Data",this.hostsData);
   }
 
   
