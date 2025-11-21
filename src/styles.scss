@@ -7,18 +7,20 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 :root {
-  --bg-body:      #212121;
-  --bg-header:    #3949ab;
-  --bg-sidebar:   #303030;
-  --bg-main:      #282828;
-  --text-primary:   #eeeeee;
-  --text-secondary: #bbbbbb;
-  --border-color:   #555555;
+  --bg-body: #151923;
+  --bg-header: #1d2330;
+  --bg-sidebar: #1a1f2b;
+  --bg-main: #181c27;
+  --text-primary: #f5f7ff;
+  --text-secondary: #b3bbcf;
+  --border-color: #2f3444;
+  --accent-color: #8aa4ff;
+  --accent-muted: #4c5d92;
 }
 // === СВЕТЛАЯ ТЕМА ===
 .light-theme {
   --bg-body: #ffffff;
-  --bg-header: #3f51b5;
+  --bg-header: #2d41b3;
   --bg-sidebar: #f5f5f5;
   --bg-main: #f8f9fa;
   --text-primary: rgba(0, 0, 0, 0.87);
@@ -351,4 +353,75 @@ mat-tab-label-active {
 //   }
 // }
 
+
+
+/* Compact dark tab styling override */
+mat-tab-group {
+  background: transparent;
+  border-radius: 0;
+  box-shadow: none;
+  --mat-tab-header-inactive-label-text-color: var(--text-secondary);
+  --mat-tab-header-active-label-text-color: var(--text-primary);
+  --mat-tab-header-active-hover-label-text-color: var(--text-primary);
+  --mat-tab-ink-bar-color: var(--accent-color);
+  --mat-tab-header-active-ripple-color: transparent;
+  --mat-tab-header-inactive-ripple-color: transparent;
+}
+
+mat-tab-header {
+  background: #181a22 !important;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  padding: 4px 6px;
+  gap: 4px;
+}
+
+mat-tab-label {
+  position: relative;
+  overflow: hidden;
+  color: var(--text-secondary) !important;
+  opacity: 1 !important;
+  font-weight: 500;
+  min-width: 96px !important;
+  height: 42px !important;
+  background: transparent !important;
+  transition: color 0.2s ease;
+  border-radius: 3px;
+  margin: 0 2px;
+}
+
+mat-tab-label::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.03);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+mat-tab-label:hover::before {
+  opacity: 1;
+}
+
+mat-tab-label.mat-mdc-tab-label-active::before {
+  opacity: 1;
+  background: rgba(126, 141, 241, 0.18);
+}
+
+mat-ink-bar {
+  background-color: var(--accent-color) !important;
+  height: 3px !important;
+  border-radius: 3px 3px 0 0;
+}
+
+mat-tab-body-wrapper {
+  background: transparent;
+}
+
+mat-tab-body,
+mat-tab-body-content {
+  padding: 0;
+  overflow: hidden;
+}
 

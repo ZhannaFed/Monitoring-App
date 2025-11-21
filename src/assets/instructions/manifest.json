@@ -15,7 +15,7 @@
             "path": "assets/instructions/main/АНГЦ/Если клиент зависает на диалоги HMISYS.docx",
             "ext": "docx",
             "size": 13069,
-            "mtime": "2022-03-11T16:54:45.937Z",
+            "mtime": "2025-11-19T06:40:48.403Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -25,7 +25,7 @@
             "path": "assets/instructions/main/АНГЦ/Инструкция в случае сбоя работы основного сервера ЧМИ АНГЦ или АНО.docx",
             "ext": "docx",
             "size": 1256950,
-            "mtime": "2018-12-17T02:23:54.203Z",
+            "mtime": "2025-11-19T06:40:48.410Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -35,7 +35,7 @@
             "path": "assets/instructions/main/АНГЦ/Инструкция по запуску виртуального сервера 2 уровня АНГЦ.docx",
             "ext": "docx",
             "size": 1479904,
-            "mtime": "2019-03-22T10:06:03.656Z",
+            "mtime": "2025-11-19T06:40:48.414Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -45,7 +45,7 @@
             "path": "assets/instructions/main/АНГЦ/Перезагрузка_Сервера_АНГЦ.doc",
             "ext": "doc",
             "size": 565248,
-            "mtime": "2020-06-01T08:48:00.404Z",
+            "mtime": "2025-11-19T06:40:48.417Z",
             "mime": "application/msword",
             "readable": false
           },
@@ -55,18 +55,18 @@
             "path": "assets/instructions/main/АНГЦ/Перезапуск_POH.doc",
             "ext": "doc",
             "size": 433664,
-            "mtime": "2020-06-01T08:48:48.894Z",
+            "mtime": "2025-11-19T06:40:48.420Z",
             "mime": "application/msword",
             "readable": false
           },
           {
-            "name": "Перезапуск_ProconTEL.lnk",
+            "name": "Перезапуск_POH.docx",
             "type": "file",
-            "path": "assets/instructions/main/АНГЦ/Перезапуск_ProconTEL.lnk",
-            "ext": "lnk",
-            "size": 3300,
-            "mtime": "2017-01-24T01:59:28.474Z",
-            "mime": "application/x-ms-shortcut",
+            "path": "assets/instructions/main/АНГЦ/Перезапуск_POH.docx",
+            "ext": "docx",
+            "size": 419788,
+            "mtime": "2025-11-20T10:40:20.230Z",
+            "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
           {
@@ -75,18 +75,8 @@
             "path": "assets/instructions/main/АНГЦ/CGL.xlsx",
             "ext": "xlsx",
             "size": 14448,
-            "mtime": "2020-05-18T05:13:00.333Z",
+            "mtime": "2025-11-19T06:40:48.403Z",
             "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "readable": false
-          },
-          {
-            "name": "Thumbs.db",
-            "type": "file",
-            "path": "assets/instructions/main/АНГЦ/Thumbs.db",
-            "ext": "db",
-            "size": 48640,
-            "mtime": "2023-10-21T13:01:55.515Z",
-            "mime": "application/octet-stream",
             "readable": false
           }
         ]
@@ -102,7 +92,7 @@
             "path": "assets/instructions/main/АНГЦ-3/Инструкция в случае сбоя сервера HMI на АНГЦ3.docx",
             "ext": "docx",
             "size": 2357609,
-            "mtime": "2020-03-19T03:36:52.452Z",
+            "mtime": "2025-11-19T06:40:48.366Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -112,7 +102,7 @@
             "path": "assets/instructions/main/АНГЦ-3/Инструкция для запуска резервного сервера HMI АНГЦ3.docx",
             "ext": "docx",
             "size": 2304085,
-            "mtime": "2020-03-17T02:02:45.592Z",
+            "mtime": "2025-11-19T06:40:48.374Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -122,7 +112,7 @@
             "path": "assets/instructions/main/АНГЦ-3/Инструкция для кранового позиционирования.docx",
             "ext": "docx",
             "size": 578162,
-            "mtime": "2021-04-07T02:56:45.239Z",
+            "mtime": "2025-11-19T06:40:48.377Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -132,7 +122,7 @@
             "path": "assets/instructions/main/АНГЦ-3/Инструкция по диагностике DEX_OUT АНГЦ-3.docx",
             "ext": "docx",
             "size": 2608275,
-            "mtime": "2018-10-22T09:07:39.496Z",
+            "mtime": "2025-11-19T06:40:48.386Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -142,7 +132,7 @@
             "path": "assets/instructions/main/АНГЦ-3/Инструкция по перезагрузке 2 уровня.docx",
             "ext": "docx",
             "size": 2158624,
-            "mtime": "2021-12-17T07:06:19.084Z",
+            "mtime": "2025-11-19T06:40:48.395Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -152,7 +142,7 @@
             "path": "assets/instructions/main/АНГЦ-3/Инструкция по перезагрузке АРМ кранового позиционирования.docx",
             "ext": "docx",
             "size": 1551667,
-            "mtime": "2021-04-06T07:15:35.319Z",
+            "mtime": "2025-11-19T06:40:48.402Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           }
@@ -169,7 +159,7 @@
             "path": "assets/instructions/main/АНО-АНГЦ/Диагностика и устранение неполадки при закатке шва.docx",
             "ext": "docx",
             "size": 479139,
-            "mtime": "2020-03-26T03:51:55.124Z",
+            "mtime": "2025-11-19T06:40:48.424Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -179,7 +169,7 @@
             "path": "assets/instructions/main/АНО-АНГЦ/Если клиент зависает на диалоги HMISYS.docx",
             "ext": "docx",
             "size": 12155,
-            "mtime": "2016-05-15T20:56:28.000Z",
+            "mtime": "2025-11-19T06:40:48.424Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -189,7 +179,7 @@
             "path": "assets/instructions/main/АНО-АНГЦ/Инструкция в случае сбоя работы основного сервера ЧМИ АНГЦ или АНО.docx",
             "ext": "docx",
             "size": 1256950,
-            "mtime": "2018-12-17T02:23:54.203Z",
+            "mtime": "2025-11-19T06:40:48.430Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -199,7 +189,7 @@
             "path": "assets/instructions/main/АНО-АНГЦ/Инструкция по переходу на резервный виртуальный сервер 2 уровня АНО-ГЦ.docx",
             "ext": "docx",
             "size": 2517129,
-            "mtime": "2024-08-29T09:27:33.898Z",
+            "mtime": "2025-11-19T06:40:48.440Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -209,7 +199,7 @@
             "path": "assets/instructions/main/АНО-АНГЦ/Перезагрузка_Сервера_АНО-АНГЦ.doc",
             "ext": "doc",
             "size": 655872,
-            "mtime": "2020-06-01T08:56:26.239Z",
+            "mtime": "2025-11-19T06:40:48.444Z",
             "mime": "application/msword",
             "readable": false
           },
@@ -219,7 +209,7 @@
             "path": "assets/instructions/main/АНО-АНГЦ/Перезапуск_POH.doc",
             "ext": "doc",
             "size": 433664,
-            "mtime": "2020-06-01T08:54:57.694Z",
+            "mtime": "2025-11-19T06:40:48.445Z",
             "mime": "application/msword",
             "readable": false
           },
@@ -229,7 +219,7 @@
             "path": "assets/instructions/main/АНО-АНГЦ/Перезапуск_ProconTEL.lnk",
             "ext": "lnk",
             "size": 2634,
-            "mtime": "2012-08-27T05:58:31.262Z",
+            "mtime": "2025-11-19T06:40:48.445Z",
             "mime": "application/x-ms-shortcut",
             "readable": false
           },
@@ -239,18 +229,8 @@
             "path": "assets/instructions/main/АНО-АНГЦ/CALCGL.xlsx",
             "ext": "xlsx",
             "size": 12580,
-            "mtime": "2020-06-01T09:00:20.055Z",
+            "mtime": "2025-11-19T06:40:48.421Z",
             "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-            "readable": false
-          },
-          {
-            "name": "Thumbs.db",
-            "type": "file",
-            "path": "assets/instructions/main/АНО-АНГЦ/Thumbs.db",
-            "ext": "db",
-            "size": 81408,
-            "mtime": "2012-08-27T05:58:55.240Z",
-            "mime": "application/octet-stream",
             "readable": false
           }
         ]
@@ -266,7 +246,7 @@
             "path": "assets/instructions/main/НТА-Стан/Востановление настроек HMI L2 после удаления столбцов.txt",
             "ext": "txt",
             "size": 202,
-            "mtime": "2016-11-03T05:36:15.280Z",
+            "mtime": "2025-11-19T06:40:48.447Z",
             "mime": "text/plain",
             "readable": true
           },
@@ -276,7 +256,7 @@
             "path": "assets/instructions/main/НТА-Стан/Если пропали все данные на HMI L2 травильного агрегата.docx",
             "ext": "docx",
             "size": 82500,
-            "mtime": "2020-06-01T04:36:39.058Z",
+            "mtime": "2025-11-19T06:40:48.448Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -286,7 +266,7 @@
             "path": "assets/instructions/main/НТА-Стан/ЗАДЕРЖКА ТЕЛЕГРАММ НА КРОМКЕ!!!.docx",
             "ext": "docx",
             "size": 1365612,
-            "mtime": "2020-01-17T04:49:05.594Z",
+            "mtime": "2025-11-19T06:40:48.453Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -296,7 +276,7 @@
             "path": "assets/instructions/main/НТА-Стан/Изменение данных по рулону(для прокатки 2в1).docx",
             "ext": "docx",
             "size": 349395,
-            "mtime": "2017-01-31T04:52:45.797Z",
+            "mtime": "2025-11-19T06:40:48.455Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -306,7 +286,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция в случае отсутствия марки стали.docx",
             "ext": "docx",
             "size": 2434621,
-            "mtime": "2021-12-21T04:15:50.265Z",
+            "mtime": "2025-11-19T06:40:48.465Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -316,7 +296,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция в случае сбоя работы основного сервера HMI стана PLL1HMIS1.docx",
             "ext": "docx",
             "size": 2312117,
-            "mtime": "2024-03-27T01:35:03.022Z",
+            "mtime": "2025-11-19T06:40:48.476Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -326,7 +306,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция в случае сбоя работы основного сервера HMI стана TCML1HMIS1.docx",
             "ext": "docx",
             "size": 596624,
-            "mtime": "2021-12-25T03:39:04.117Z",
+            "mtime": "2025-11-19T06:40:48.479Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -336,7 +316,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция для появления профиля в паспортах.docx",
             "ext": "docx",
             "size": 1668399,
-            "mtime": "2023-04-04T03:15:56.781Z",
+            "mtime": "2025-11-19T06:40:48.487Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -346,7 +326,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция по перезагрузке виртуального сервера НТА-СТАН.docx",
             "ext": "docx",
             "size": 598291,
-            "mtime": "2018-04-20T10:25:23.560Z",
+            "mtime": "2025-11-19T06:40:48.489Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -356,7 +336,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция по перезагрузке виртуального сервера планшетности 1 клети.docx",
             "ext": "docx",
             "size": 7290027,
-            "mtime": "2019-04-03T10:47:19.448Z",
+            "mtime": "2025-11-19T06:40:48.503Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -366,7 +346,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция по перезагрузке виртуальных КЛИЕНТОВ L2__2020г____.docx",
             "ext": "docx",
             "size": 6135955,
-            "mtime": "2020-03-03T18:01:38.658Z",
+            "mtime": "2025-11-19T06:40:48.531Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -376,7 +356,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция по перезагрузке виртуальных серверов PL И TCM____2019г____.docx",
             "ext": "docx",
             "size": 5020782,
-            "mtime": "2019-07-04T04:13:42.097Z",
+            "mtime": "2025-11-19T06:40:48.542Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -386,7 +366,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция по подключению сетевых дисков для просмотра видео.docx",
             "ext": "docx",
             "size": 2590094,
-            "mtime": "2020-06-03T07:11:45.754Z",
+            "mtime": "2025-11-19T06:40:48.554Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -396,7 +376,7 @@
             "path": "assets/instructions/main/НТА-Стан/Инструкция по решению проблем с резом по длине.docx",
             "ext": "docx",
             "size": 386548,
-            "mtime": "2017-03-31T03:36:30.000Z",
+            "mtime": "2025-11-19T06:40:48.556Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -406,7 +386,7 @@
             "path": "assets/instructions/main/НТА-Стан/Описание_программы_ProconTEL.doc",
             "ext": "doc",
             "size": 88064,
-            "mtime": "2012-08-06T08:54:48.880Z",
+            "mtime": "2025-11-19T06:40:48.557Z",
             "mime": "application/msword",
             "readable": false
           },
@@ -416,7 +396,7 @@
             "path": "assets/instructions/main/НТА-Стан/Описание_программы_ProconTEL.odt",
             "ext": "odt",
             "size": 90410,
-            "mtime": "2012-08-06T07:57:27.069Z",
+            "mtime": "2025-11-19T06:40:48.558Z",
             "mime": "application/vnd.oasis.opendocument.text",
             "readable": false
           },
@@ -426,7 +406,7 @@
             "path": "assets/instructions/main/НТА-Стан/Ошибка в расчетах модели уровня 2 СТАН.docx",
             "ext": "docx",
             "size": 583393,
-            "mtime": "2016-06-02T04:29:44.000Z",
+            "mtime": "2025-11-19T06:40:48.561Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -436,7 +416,7 @@
             "path": "assets/instructions/main/НТА-Стан/Перезагрузка сервера TCM(стан).docx",
             "ext": "docx",
             "size": 1683235,
-            "mtime": "2015-01-15T10:52:38.652Z",
+            "mtime": "2025-11-19T06:40:48.569Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -446,7 +426,7 @@
             "path": "assets/instructions/main/НТА-Стан/Перезагрузка_Базы _Данных.doc",
             "ext": "doc",
             "size": 259584,
-            "mtime": "2015-01-15T10:44:43.024Z",
+            "mtime": "2025-11-19T06:40:48.570Z",
             "mime": "application/msword",
             "readable": false
           },
@@ -456,7 +436,7 @@
             "path": "assets/instructions/main/НТА-Стан/Перезагрузка_Сервера_НТА.doc",
             "ext": "doc",
             "size": 643584,
-            "mtime": "2012-08-27T07:40:29.145Z",
+            "mtime": "2025-11-19T06:40:48.572Z",
             "mime": "application/msword",
             "readable": false
           },
@@ -466,7 +446,7 @@
             "path": "assets/instructions/main/НТА-Стан/Перезапуск_ProconTEL.doc",
             "ext": "doc",
             "size": 178688,
-            "mtime": "2013-06-17T04:28:02.049Z",
+            "mtime": "2025-11-19T06:40:48.573Z",
             "mime": "application/msword",
             "readable": false
           },
@@ -476,7 +456,7 @@
             "path": "assets/instructions/main/НТА-Стан/Проверка работоспособности сервра TCM(стан).doc",
             "ext": "doc",
             "size": 1577472,
-            "mtime": "2012-08-04T04:34:53.769Z",
+            "mtime": "2025-11-19T06:40:48.580Z",
             "mime": "application/msword",
             "readable": false
           },
@@ -486,7 +466,7 @@
             "path": "assets/instructions/main/НТА-Стан/Проверка_связи_с_Уровнем_3_через_АРМ_Уровня_3.doc",
             "ext": "doc",
             "size": 189952,
-            "mtime": "2012-08-06T04:39:00.484Z",
+            "mtime": "2025-11-19T06:40:48.582Z",
             "mime": "application/msword",
             "readable": false
           },
@@ -496,7 +476,7 @@
             "path": "assets/instructions/main/НТА-Стан/Процессы передачи данных с 2 на 3 уровень СТАНА.png",
             "ext": "png",
             "size": 409209,
-            "mtime": "2025-03-09T06:28:41.675Z",
+            "mtime": "2025-11-19T06:40:48.585Z",
             "mime": "image/png",
             "readable": false
           },
@@ -506,7 +486,7 @@
             "path": "assets/instructions/main/НТА-Стан/Удаление списанных  валков в базе L2.docx",
             "ext": "docx",
             "size": 521198,
-            "mtime": "2016-05-04T02:53:50.406Z",
+            "mtime": "2025-11-19T06:40:48.587Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -516,19 +496,9 @@
             "path": "assets/instructions/main/НТА-Стан/New Text Document.txt",
             "ext": "txt",
             "size": 42,
-            "mtime": "2022-02-10T13:48:43.929Z",
+            "mtime": "2025-11-19T06:40:48.445Z",
             "mime": "text/plain",
             "readable": true
-          },
-          {
-            "name": "Thumbs.db",
-            "type": "file",
-            "path": "assets/instructions/main/НТА-Стан/Thumbs.db",
-            "ext": "db",
-            "size": 108544,
-            "mtime": "2025-10-06T10:20:20.450Z",
-            "mime": "application/octet-stream",
-            "readable": false
           }
         ]
       },
@@ -538,13 +508,13 @@
         "path": "assets/instructions/main/DOC",
         "children": [
           {
-            "name": "2015 ППР №1 ЛПЦ-11 напольное и крановое эл об и элел АСУ и АЭП 1(1).doc",
+            "name": "2015 ППР №1 ЛПЦ-11 напольное и крановое эл об и элел АСУ и АЭП 1.docx",
             "type": "file",
-            "path": "assets/instructions/main/DOC/2015 ППР №1 ЛПЦ-11 напольное и крановое эл об и элел АСУ и АЭП 1(1).doc",
-            "ext": "doc",
-            "size": 487424,
-            "mtime": "2015-12-01T04:05:50.000Z",
-            "mime": "application/msword",
+            "path": "assets/instructions/main/DOC/2015 ППР №1 ЛПЦ-11 напольное и крановое эл об и элел АСУ и АЭП 1.docx",
+            "ext": "docx",
+            "size": 156957,
+            "mtime": "2025-11-20T10:29:11.158Z",
+            "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
           {
@@ -553,8 +523,18 @@
             "path": "assets/instructions/main/DOC/Оборудование АНО, АНГЦ, CPL для ввода в АСУ ТОиР.xls",
             "ext": "xls",
             "size": 1784320,
-            "mtime": "2016-02-28T17:12:23.737Z",
+            "mtime": "2025-11-19T06:40:48.301Z",
             "mime": "application/vnd.ms-excel",
+            "readable": false
+          },
+          {
+            "name": "Оборудование-АНО_-АНГЦ_-CPL-для-ввода-в-АСУ-ТОиР.pdf",
+            "type": "file",
+            "path": "assets/instructions/main/DOC/Оборудование-АНО_-АНГЦ_-CPL-для-ввода-в-АСУ-ТОиР.pdf",
+            "ext": "pdf",
+            "size": 65586,
+            "mtime": "2025-11-20T10:37:39.845Z",
+            "mime": "application/pdf",
             "readable": false
           },
           {
@@ -563,7 +543,7 @@
             "path": "assets/instructions/main/DOC/automated_control_of_rolling.pdf",
             "ext": "pdf",
             "size": 9427910,
-            "mtime": "2015-11-12T05:13:10.101Z",
+            "mtime": "2025-11-19T06:40:48.294Z",
             "mime": "application/pdf",
             "readable": false
           },
@@ -573,7 +553,7 @@
             "path": "assets/instructions/main/DOC/G_OLM_r.pdf",
             "ext": "pdf",
             "size": 1456229,
-            "mtime": "2015-09-26T03:04:24.818Z",
+            "mtime": "2025-11-19T06:40:48.257Z",
             "mime": "application/pdf",
             "readable": false
           },
@@ -583,7 +563,7 @@
             "path": "assets/instructions/main/DOC/IMG_20141204_093529.jpg",
             "ext": "jpg",
             "size": 1014255,
-            "mtime": "2015-02-07T16:16:32.000Z",
+            "mtime": "2025-11-19T06:40:48.262Z",
             "mime": "image/jpeg",
             "readable": false
           },
@@ -593,8 +573,18 @@
             "path": "assets/instructions/main/DOC/Microsoft Office Excel Worksheet.xlsx",
             "ext": "xlsx",
             "size": 13223,
-            "mtime": "2015-12-22T21:22:49.393Z",
+            "mtime": "2025-11-19T06:40:48.263Z",
             "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "readable": false
+          },
+          {
+            "name": "Microsoft-Office-Excel-Worksheet.pdf",
+            "type": "file",
+            "path": "assets/instructions/main/DOC/Microsoft-Office-Excel-Worksheet.pdf",
+            "ext": "pdf",
+            "size": 15667,
+            "mtime": "2025-11-20T10:37:22.824Z",
+            "mime": "application/pdf",
             "readable": false
           },
           {
@@ -603,7 +593,7 @@
             "path": "assets/instructions/main/DOC/RCL.jpg",
             "ext": "jpg",
             "size": 349240,
-            "mtime": "2015-07-25T09:24:46.857Z",
+            "mtime": "2025-11-19T06:40:48.265Z",
             "mime": "image/jpeg",
             "readable": false
           },
@@ -613,18 +603,18 @@
             "path": "assets/instructions/main/DOC/sai200.djvu",
             "ext": "djvu",
             "size": 434800,
-            "mtime": "2015-08-28T14:44:34.000Z",
+            "mtime": "2025-11-19T06:40:48.296Z",
             "mime": "image/vnd.djvu",
             "readable": false
           },
           {
-            "name": "Thumbs.db",
+            "name": "sai200.docx",
             "type": "file",
-            "path": "assets/instructions/main/DOC/Thumbs.db",
-            "ext": "db",
-            "size": 85504,
-            "mtime": "2022-07-28T08:35:36.376Z",
-            "mime": "application/octet-stream",
+            "path": "assets/instructions/main/DOC/sai200.docx",
+            "ext": "docx",
+            "size": 810111,
+            "mtime": "2025-11-20T10:27:31.822Z",
+            "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           }
         ]
@@ -640,7 +630,7 @@
             "path": "assets/instructions/main/RCL/11.03.2022.jpg",
             "ext": "jpg",
             "size": 482737,
-            "mtime": "2022-03-11T15:23:52.011Z",
+            "mtime": "2025-11-19T06:40:48.303Z",
             "mime": "image/jpeg",
             "readable": false
           },
@@ -650,7 +640,7 @@
             "path": "assets/instructions/main/RCL/Дополнительные сведенья по агрегату инспекции и перемотки RCL.docx",
             "ext": "docx",
             "size": 13291,
-            "mtime": "2012-10-16T04:58:54.000Z",
+            "mtime": "2025-11-19T06:40:48.304Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -660,7 +650,7 @@
             "path": "assets/instructions/main/RCL/Если клиент зависает на диалоги HMISYS.docx",
             "ext": "docx",
             "size": 12155,
-            "mtime": "2016-05-15T20:56:28.000Z",
+            "mtime": "2025-11-19T06:40:48.305Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -670,7 +660,7 @@
             "path": "assets/instructions/main/RCL/Инструкция по очистке базы данных в случае нехватки места.docx",
             "ext": "docx",
             "size": 557121,
-            "mtime": "2020-06-01T08:20:52.722Z",
+            "mtime": "2025-11-19T06:40:48.307Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -680,7 +670,7 @@
             "path": "assets/instructions/main/RCL/Инструкция по очистке зависших рулонов на агрегате инспекции.docx",
             "ext": "docx",
             "size": 1036351,
-            "mtime": "2020-06-01T08:12:41.847Z",
+            "mtime": "2025-11-19T06:40:48.312Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
@@ -690,8 +680,18 @@
             "path": "assets/instructions/main/RCL/Инструкция по перезагрузке виртуального сервера RCL_2020_г.docx",
             "ext": "docx",
             "size": 4800727,
-            "mtime": "2020-06-01T04:19:16.446Z",
+            "mtime": "2025-11-19T06:40:48.342Z",
             "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            "readable": false
+          },
+          {
+            "name": "Отправка_уставок_и_смена_статусов.pdf",
+            "type": "file",
+            "path": "assets/instructions/main/RCL/Отправка_уставок_и_смена_статусов.pdf",
+            "ext": "pdf",
+            "size": 24423,
+            "mtime": "2025-11-20T10:34:13.534Z",
+            "mime": "application/pdf",
             "readable": false
           },
           {
@@ -700,7 +700,7 @@
             "path": "assets/instructions/main/RCL/Отправка_уставок_и_смена_статусов.xls",
             "ext": "xls",
             "size": 20490,
-            "mtime": "2012-10-19T03:11:02.000Z",
+            "mtime": "2025-11-19T06:40:48.342Z",
             "mime": "application/vnd.ms-excel",
             "readable": false
           },
@@ -710,48 +710,48 @@
             "path": "assets/instructions/main/RCL/Пароли RCL+CPL.xlsx",
             "ext": "xlsx",
             "size": 12377,
-            "mtime": "2020-06-01T08:42:00.832Z",
+            "mtime": "2025-11-19T06:40:48.343Z",
             "mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
             "readable": false
           },
           {
-            "name": "Перезагрузка_Сервера_RCL.doc",
+            "name": "Пароли-RCL-CPL.pdf",
             "type": "file",
-            "path": "assets/instructions/main/RCL/Перезагрузка_Сервера_RCL.doc",
-            "ext": "doc",
-            "size": 1139712,
-            "mtime": "2020-06-01T06:43:02.223Z",
-            "mime": "application/msword",
+            "path": "assets/instructions/main/RCL/Пароли-RCL-CPL.pdf",
+            "ext": "pdf",
+            "size": 52114,
+            "mtime": "2025-11-20T10:36:07.189Z",
+            "mime": "application/pdf",
             "readable": false
           },
           {
-            "name": "Перезапуск_POH.doc",
+            "name": "Перезагрузка_Сервера_RCL.docx",
             "type": "file",
-            "path": "assets/instructions/main/RCL/Перезапуск_POH.doc",
-            "ext": "doc",
-            "size": 437760,
-            "mtime": "2020-06-01T05:23:10.441Z",
-            "mime": "application/msword",
+            "path": "assets/instructions/main/RCL/Перезагрузка_Сервера_RCL.docx",
+            "ext": "docx",
+            "size": 821981,
+            "mtime": "2025-11-20T10:31:34.435Z",
+            "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
           {
-            "name": "Проверка_связи_с_Уровнем_3.doc",
+            "name": "Перезапуск_POH.docx",
             "type": "file",
-            "path": "assets/instructions/main/RCL/Проверка_связи_с_Уровнем_3.doc",
-            "ext": "doc",
-            "size": 305152,
-            "mtime": "2020-06-01T05:18:06.801Z",
-            "mime": "application/msword",
+            "path": "assets/instructions/main/RCL/Перезапуск_POH.docx",
+            "ext": "docx",
+            "size": 424355,
+            "mtime": "2025-11-20T10:32:22.701Z",
+            "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           },
           {
-            "name": "Thumbs.db",
+            "name": "Проверка_связи_с_Уровнем_3.docx",
             "type": "file",
-            "path": "assets/instructions/main/RCL/Thumbs.db",
-            "ext": "db",
-            "size": 17408,
-            "mtime": "2023-10-21T13:47:49.765Z",
-            "mime": "application/octet-stream",
+            "path": "assets/instructions/main/RCL/Проверка_связи_с_Уровнем_3.docx",
+            "ext": "docx",
+            "size": 285226,
+            "mtime": "2025-11-20T10:32:20.546Z",
+            "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             "readable": false
           }
         ]
@@ -764,7 +764,7 @@
     "path": "assets/instructions/Если клиент зависает на диалоги HMISYS.docx",
     "ext": "docx",
     "size": 12155,
-    "mtime": "2016-05-15T20:56:28.000Z",
+    "mtime": "2025-11-19T06:40:48.588Z",
     "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
@@ -774,7 +774,7 @@
     "path": "assets/instructions/Инструкция если на кранах нет карты.docx",
     "ext": "docx",
     "size": 1721522,
-    "mtime": "2021-12-28T03:26:57.015Z",
+    "mtime": "2025-11-19T06:40:48.599Z",
     "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
@@ -784,28 +784,28 @@
     "path": "assets/instructions/Инструкция Кранов на складах 1 и 2 очереди ЛПЦ.docx",
     "ext": "docx",
     "size": 611508,
-    "mtime": "2023-08-23T06:45:04.000Z",
+    "mtime": "2025-11-19T06:40:48.591Z",
     "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
   {
-    "name": "ИнструкцияWinCC_video_CGL-CALCGL.doc",
+    "name": "ИнструкцияWinCC_video_CGL-CALCGL.docx",
     "type": "file",
-    "path": "assets/instructions/ИнструкцияWinCC_video_CGL-CALCGL.doc",
-    "ext": "doc",
-    "size": 84480,
-    "mtime": "2013-08-30T03:57:57.288Z",
-    "mime": "application/msword",
+    "path": "assets/instructions/ИнструкцияWinCC_video_CGL-CALCGL.docx",
+    "ext": "docx",
+    "size": 25326,
+    "mtime": "2025-11-20T10:20:37.945Z",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
   {
-    "name": "ИнструкцияWinCC_video.doc",
+    "name": "ИнструкцияWinCC_video.docx",
     "type": "file",
-    "path": "assets/instructions/ИнструкцияWinCC_video.doc",
-    "ext": "doc",
-    "size": 67072,
-    "mtime": "2013-08-30T03:56:07.589Z",
-    "mime": "application/msword",
+    "path": "assets/instructions/ИнструкцияWinCC_video.docx",
+    "ext": "docx",
+    "size": 22271,
+    "mtime": "2025-11-20T10:20:23.816Z",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
   {
@@ -814,7 +814,7 @@
     "path": "assets/instructions/Иструкция понастройке точек Wifi_Eltex_краны2очередь.docx",
     "ext": "docx",
     "size": 1705750,
-    "mtime": "2025-04-17T06:55:46.606Z",
+    "mtime": "2025-11-19T06:40:48.608Z",
     "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
@@ -824,18 +824,18 @@
     "path": "assets/instructions/Обновление базы данных CPL.docx",
     "ext": "docx",
     "size": 911570,
-    "mtime": "2016-07-03T13:12:08.655Z",
+    "mtime": "2025-11-19T06:40:48.613Z",
     "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
   {
-    "name": "Передача данных с уровня 3 на уровень 2 ЛПЦ11.doc",
+    "name": "Передача данных с уровня 3 на уровень 2 ЛПЦ11.docx",
     "type": "file",
-    "path": "assets/instructions/Передача данных с уровня 3 на уровень 2 ЛПЦ11.doc",
-    "ext": "doc",
-    "size": 2713600,
-    "mtime": "2020-06-01T04:33:41.845Z",
-    "mime": "application/msword",
+    "path": "assets/instructions/Передача данных с уровня 3 на уровень 2 ЛПЦ11.docx",
+    "ext": "docx",
+    "size": 2662394,
+    "mtime": "2025-11-20T10:20:52.565Z",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
   {
@@ -844,18 +844,18 @@
     "path": "assets/instructions/Удаление списанных  валков в базе L2.docx",
     "ext": "docx",
     "size": 521198,
-    "mtime": "2016-05-04T02:53:50.000Z",
+    "mtime": "2025-11-19T06:40:48.628Z",
     "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
   {
-    "name": "LogViewer.doc",
+    "name": "LogViewer.docx",
     "type": "file",
-    "path": "assets/instructions/LogViewer.doc",
-    "ext": "doc",
-    "size": 1040384,
-    "mtime": "2013-05-29T02:43:22.530Z",
-    "mime": "application/msword",
+    "path": "assets/instructions/LogViewer.docx",
+    "ext": "docx",
+    "size": 1009542,
+    "mtime": "2025-11-20T10:19:30.015Z",
+    "mime": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
     "readable": false
   },
   {
@@ -863,8 +863,8 @@
     "type": "file",
     "path": "assets/instructions/manifest.json",
     "ext": "json",
-    "size": 38788,
-    "mtime": "2025-10-28T05:17:55.766Z",
+    "size": 37728,
+    "mtime": "2025-11-20T10:27:50.952Z",
     "mime": "application/json",
     "readable": true
   }

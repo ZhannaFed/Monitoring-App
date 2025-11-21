@@ -2,9 +2,12 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
-  height: 64px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  padding: 0 16px;
+  height: 58px;
+  background: linear-gradient(120deg, rgba(26, 29, 40, 0.95), rgba(18, 20, 28, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 4px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
   position: relative;
   z-index: 10;
 }
@@ -12,33 +15,40 @@
 .header-title {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 20px;
-  font-weight: 500;
-  letter-spacing: 0.5px;
+  gap: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
 }
 
 .header-icon {
-  font-size: 28px;
+  font-size: 26px;
   width: 28px;
   height: 28px;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--accent-color);
+  background: rgba(126, 141, 241, 0.12);
+  border-radius: 4px;
+  padding: 4px;
 }
 
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 8px;
 }
 
 .action-icon {
-  color: white;
+  color: var(--text-primary);
   cursor: pointer;
-  padding: 8px;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
+  padding: 6px;
+  border-radius: 3px;
+  transition: background-color 0.2s ease, color 0.2s ease;
+  border: 1px solid transparent;
 }
 
 .action-icon:hover {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.1);
+  color: var(--accent-color);
 }

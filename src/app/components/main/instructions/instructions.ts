@@ -31,6 +31,11 @@ interface PreviewMessageLink {
   url: string;
 }
 
+interface SearchContentMatch {
+  node: InstructionNode;
+  snippet: SafeHtml;
+}
+
 type PreviewState =
   | { kind: 'idle' }
   | { kind: 'loading'; message: string }
@@ -93,16 +98,56 @@ export class Instructions implements OnInit, OnDestroy {
 
   private readonly spreadsheetExtensions = new Set(['xls', 'xlsx']);
 
+  private readonly minZoom = 0.5;
+  private readonly maxZoom = 2;
+  private readonly zoomStep = 0.1;
+
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
   protected readonly tree = signal<InstructionNode[]>([]);
   protected readonly expanded = signal(new Set<string>());
   protected readonly selected = signal<InstructionNode | null>(null);
   protected readonly previewState = signal<PreviewState>({ kind: 'idle' });
+  protected readonly treeCollapsed = signal(false);
+  protected readonly previewZoom = signal(1);
+  protected readonly searchQuery = signal('');
+  protected readonly searchLoading = signal(false);
+  protected readonly searchError = signal<string | null>(null);
+  protected readonly searchNameResults = signal<InstructionNode[]>([]);
+  protected readonly searchContentResults = signal<SearchContentMatch[]>([]);
 
   protected readonly hasItems = computed(() => this.tree().length > 0);
+  protected readonly previewZoomPercent = computed(() =>
+    Math.round(this.previewZoom() * 100)
+  );
+  protected readonly canZoomIn = computed(
+    () => this.previewZoom() < this.maxZoom - 0.001
+  );
+  protected readonly canZoomOut = computed(
+    () => this.previewZoom() > this.minZoom + 0.001
+  );
+  protected readonly zoomTransform = computed(
+    () => `scale(${this.previewZoom().toFixed(2)})`
+  );
+  protected readonly zoomFillPercent = computed(() => {
+    const zoom = this.previewZoom();
+    const percent = Math.max(100, 100 / zoom);
+    return `${percent.toFixed(2)}%`;
+  });
+  protected readonly isSearchActive = computed(
+    () => this.searchQuery().trim().length > 0
+  );
+  protected readonly hasSearchResults = computed(
+    () =>
+      this.searchNameResults().length > 0 ||
+      this.searchContentResults().length > 0
+  );
 
   private objectUrl: string | null = null;
+  private searchSequence = 0;
+  private readonly maxContentMatches = 20;
+  private readonly snippetRadius = 80;
+  private readonly searchContentCache = new Map<string, string>();
 
   ngOnInit(): void {
     void this.loadManifest();
@@ -128,6 +173,73 @@ export class Instructions implements OnInit, OnDestroy {
     this.toggleFolder(node);
   }
 
+  protected toggleTreePanel(): void {
+    this.treeCollapsed.update((state) => !state);
+  }
+
+  protected zoomIn(): void {
+    this.previewZoom.update((zoom) => this.clampZoom(zoom + this.zoomStep));
+  }
+
+  protected zoomOut(): void {
+    this.previewZoom.update((zoom) => this.clampZoom(zoom - this.zoomStep));
+  }
+
+  protected resetZoom(): void {
+    this.previewZoom.set(1);
+  }
+
+  protected handleZoomSliderInput(event: Event): void {
+    const target = event.target as HTMLInputElement | null;
+    if (!target) {
+      return;
+    }
+
+    const percent = Number(target.value);
+    if (Number.isNaN(percent)) {
+      return;
+    }
+
+    const normalized = Math.round(percent);
+    const zoom = normalized / 100;
+    this.previewZoom.set(this.clampZoom(zoom));
+  }
+
+  protected onSearchQueryChange(value: string): void {
+    const next = value ?? '';
+    this.searchQuery.set(next);
+    void this.runSearch(next);
+  }
+
+  protected clearSearchQuery(): void {
+    this.searchQuery.set('');
+    void this.runSearch('');
+  }
+
+  protected handleSearchResultClick(node: InstructionNode): void {
+    void this.selectNode(node);
+  }
+
+  protected highlightFileName(name: string): SafeHtml | string {
+    const query = this.searchQuery().trim();
+    if (!query) {
+      return name;
+    }
+
+    return this.sanitizer.bypassSecurityTrustHtml(
+      this.highlightOccurrences(name, query)
+    );
+  }
+
+  protected formatPreviewText(content: string): SafeHtml {
+    const query = this.searchQuery().trim();
+    const source = content ?? '';
+    const highlighted = query
+      ? this.highlightOccurrences(source, query)
+      : this.escapeHtml(source);
+    return this.sanitizer.bypassSecurityTrustHtml(highlighted);
+  }
+
   protected isExpanded(node: InstructionNode): boolean {
     return node.type === 'folder' && this.expanded().has(node.path);
   }
@@ -138,6 +250,10 @@ export class Instructions implements OnInit, OnDestroy {
 
   protected trackByPath(_: number, node: InstructionNode): string {
     return node.path;
+  }
+
+  protected trackBySearchMatch(_: number, match: SearchContentMatch): string {
+    return match.node.path;
   }
 
   protected getSelectedDownloadUrl(): string | null {
@@ -228,6 +344,11 @@ export class Instructions implements OnInit, OnDestroy {
       const normalized = this.normalizeNodes(nodes);
       this.tree.set(normalized);
       this.expanded.set(this.collectInitialExpansion(normalized));
+      if (this.searchQuery().trim()) {
+        void this.runSearch(this.searchQuery());
+      } else {
+        this.resetSearchResults();
+      }
 
       if (previouslySelected) {
         const nextSelection = this.findNodeByPath(normalized, previouslySelected);
@@ -290,6 +411,191 @@ export class Instructions implements OnInit, OnDestroy {
 
     walk(nodes, 0);
     return expanded;
+  }
+
+  private async runSearch(rawQuery: string): Promise<void> {
+    const trimmed = rawQuery.trim();
+    const sequence = ++this.searchSequence;
+
+    if (!trimmed) {
+      this.resetSearchResults();
+      return;
+    }
+
+    if (!this.tree().length) {
+      this.resetSearchResults();
+      return;
+    }
+
+    this.searchLoading.set(true);
+    this.searchError.set(null);
+    this.searchNameResults.set([]);
+    this.searchContentResults.set([]);
+
+    try {
+      const files = this.flattenFiles(this.tree());
+      const loweredQuery = trimmed.toLowerCase();
+
+      const nameMatches = files
+        .filter((node) => node.name.toLowerCase().includes(loweredQuery))
+        .sort((a, b) => this.collator.compare(a.name, b.name));
+
+      if (sequence !== this.searchSequence) {
+        return;
+      }
+
+      this.searchNameResults.set(nameMatches);
+
+      const contentMatches: SearchContentMatch[] = [];
+
+      for (const node of files) {
+        if (sequence !== this.searchSequence) {
+          return;
+        }
+
+        if (!this.shouldSearchFileContents(node)) {
+          continue;
+        }
+
+        const text = await this.loadTextForSearch(node);
+        if (!text) {
+          continue;
+        }
+
+        const loweredContent = text.toLowerCase();
+        const index = loweredContent.indexOf(loweredQuery);
+        if (index === -1) {
+          continue;
+        }
+
+        const snippet = this.buildSnippet(text, trimmed, index);
+        contentMatches.push({ node, snippet });
+
+        if (contentMatches.length >= this.maxContentMatches) {
+          break;
+        }
+      }
+
+      if (sequence !== this.searchSequence) {
+        return;
+      }
+
+      this.searchContentResults.set(contentMatches);
+    } catch (error) {
+      if (sequence !== this.searchSequence) {
+        return;
+      }
+      console.error('Search error', error);
+      this.searchError.set('Не удалось выполнить поиск.');
+    } finally {
+      if (sequence === this.searchSequence) {
+        this.searchLoading.set(false);
+      }
+    }
+  }
+
+  private resetSearchResults(): void {
+    this.searchLoading.set(false);
+    this.searchError.set(null);
+    this.searchNameResults.set([]);
+    this.searchContentResults.set([]);
+  }
+
+  private flattenFiles(nodes: InstructionNode[]): InstructionNode[] {
+    const files: InstructionNode[] = [];
+
+    const walk = (items: InstructionNode[]) => {
+      for (const item of items) {
+        if (item.type === 'file') {
+          files.push(item);
+        }
+        if (item.children?.length) {
+          walk(item.children);
+        }
+      }
+    };
+
+    walk(nodes);
+    return files;
+  }
+
+  private shouldSearchFileContents(node: InstructionNode): boolean {
+    const extension = this.getExtension(node);
+    return (
+      this.textExtensions.has(extension) ||
+      extension === 'html' ||
+      extension === 'htm' ||
+      node.readable === true
+    );
+  }
+
+  private async loadTextForSearch(node: InstructionNode): Promise<string | null> {
+    const cached = this.searchContentCache.get(node.path);
+    if (cached !== undefined) {
+      return cached;
+    }
+
+    try {
+      const url = this.resolveAssetPath(node.path);
+      const buffer = await this.fetchArrayBuffer(url);
+      const text = this.decodeText(buffer);
+      this.searchContentCache.set(node.path, text);
+      return text;
+    } catch {
+      this.searchContentCache.set(node.path, '');
+      return null;
+    }
+  }
+
+  private buildSnippet(text: string, query: string, index: number): SafeHtml {
+    const start = Math.max(0, index - this.snippetRadius);
+    const end = Math.min(text.length, index + query.length + this.snippetRadius);
+    const fragment = text.slice(start, end);
+    const highlighted = this.highlightOccurrences(fragment, query);
+    const prefix = start > 0 ? '…' : '';
+    const suffix = end < text.length ? '…' : '';
+    return this.sanitizer.bypassSecurityTrustHtml(`${prefix}${highlighted}${suffix}`);
+  }
+
+  private highlightOccurrences(text: string, query: string): string {
+    if (!query) {
+      return this.escapeHtml(text);
+    }
+
+    const lowerText = text.toLowerCase();
+    const lowerQuery = query.toLowerCase();
+
+    if (!lowerText.includes(lowerQuery)) {
+      return this.escapeHtml(text);
+    }
+
+    let result = '';
+    let cursor = 0;
+
+    while (cursor < text.length) {
+      const matchIndex = lowerText.indexOf(lowerQuery, cursor);
+      if (matchIndex === -1) {
+        result += this.escapeHtml(text.slice(cursor));
+        break;
+      }
+
+      result += this.escapeHtml(text.slice(cursor, matchIndex));
+      result += `<mark>${this.escapeHtml(
+        text.slice(matchIndex, matchIndex + query.length)
+      )}</mark>`;
+      cursor = matchIndex + query.length;
+    }
+
+    return result;
+  }
+
+  private escapeHtml(value: string): string {
+    return value
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
   }
 
   private toggleFolder(node: InstructionNode): void {
@@ -651,4 +957,14 @@ export class Instructions implements OnInit, OnDestroy {
         return null;
     }
   }
+
+  private clampZoom(value: number): number {
+    if (!Number.isFinite(value)) {
+      return 1;
+    }
+
+    const clamped = Math.min(this.maxZoom, Math.max(this.minZoom, value));
+    return Math.round(clamped * 100) / 100;
+  }
+
 }

@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { HostsTable } from "../hosts-table/hosts-table";
+import { MOCK_HOSTS_BY_GROUP } from '../../../mocks/mock-hosts';
 
 @Component({
   selector: 'app-hosts',
@@ -24,6 +25,9 @@ private refreshInterval:any;
 displayedColumns: string[]=['hostId', 'hostName', 'hostIp', 'status','description', 'remoteAccess'];
 el: any;
 group: string = 'pltcm';
+// TEST HOSTS MOCK DATA ==============================
+private readonly enableMockHosts = true;
+// TEST HOSTS MOCK DATA ==============================
 
 constructor(private zabbixService: ZabbixService){}
   
@@ -126,6 +130,10 @@ ngOnInit(): void {
   // }
 
    loadAllData(group:string){
+    if (this.enableMockHosts) {
+      this.applyMockHosts(group);
+      return;
+    }
     this.group = group;
     this.getHostsByGroup(group).pipe(
       switchMap(hosts => {
@@ -183,5 +191,12 @@ ngOnInit(): void {
     console.log("Hosts Full Data",this.hostsData);
   }
 
+  // TEST HOSTS MOCK DATA ==============================
+  private applyMockHosts(group: string): void {
+    const normalized = (group ?? 'general').toLowerCase();
+    const dataset = MOCK_HOSTS_BY_GROUP[normalized] ?? MOCK_HOSTS_BY_GROUP['general'] ?? [];
+    this.hostsData = dataset.map((host) => ({ ...host }));
+  }
+  // TEST HOSTS MOCK DATA ==============================
   
 }

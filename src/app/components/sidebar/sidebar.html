@@ -1,4 +1,4 @@
-<div class="sidebar-wrapper" [class.collapsed]="isCollapsed">
+﻿<div class="sidebar-wrapper" [class.collapsed]="isCollapsed">
   <button class="toggle-button" type="button" (click)="toggleSidebar()">
     <mat-icon class="toggle-icon">{{ isCollapsed ? 'chevron_right' : 'chevron_left' }}</mat-icon>
   </button>
@@ -32,4 +32,15 @@
       <span class="navigation-label">Сети</span>
     </button>
   </nav>
+
+  <div class="sidebar-footer">
+    <button type="button" class="navigation-item footer-item">
+      <mat-icon class="navigation-icon">notifications</mat-icon>
+      <span class="navigation-label">Уведомления</span>
+    </button>
+    <button type="button" class="navigation-item footer-item">
+      <mat-icon class="navigation-icon">account_circle</mat-icon>
+      <span class="navigation-label">Профиль</span>
+    </button>
+  </div>
 </div>
