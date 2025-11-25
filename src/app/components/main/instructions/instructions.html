@@ -1,11 +1,30 @@
-<div class="instructions">
-    <section class="instructions__tree">
-        <header class="instructions__header">
-            <h2 class="instructions__title">Инструкции</h2>
-            <button type="button" class="instructions__button" (click)="reload()" [disabled]="loading()"
-                aria-label="Обновить список инструкций">
-                Обновить
+﻿<div class="instructions" [class.instructions--tree-collapsed]="treeCollapsed()">
+    <section class="instructions__tree" *ngIf="!treeCollapsed()">
+        <div class="instructions__search-bar">
+            <input #instructionsSearch class="instructions__search-input" type="search"
+                placeholder="Поиск по инструкциям" [value]="searchQuery()"
+                (input)="onSearchQueryChange(instructionsSearch.value)" [disabled]="loading()" />
+            <button type="button" class="instructions__search-clear" *ngIf="searchQuery()"
+                (click)="clearSearchQuery()" aria-label="Очистить поиск">
+                ✕
             </button>
+        </div>
+        <header class="instructions__header">
+            <div class="instructions__title-wrapper">
+                <span class="instructions__title-icon" aria-hidden="true"></span>
+                <h2 class="instructions__title">Инструкции</h2>
+            </div>
+            <div class="instructions__actions">
+                <button type="button" class="instructions__button" (click)="reload()" [disabled]="loading()"
+                    aria-label="Обновить список инструкций">
+                    Обновить
+                </button>
+
+                <button type="button" class="instructions__button instructions__button--ghost"
+                    (click)="toggleTreePanel()" aria-label="Скрыть список папок">
+                    Скрыть панель
+                </button>
+            </div>
         </header>
 
         <div class="instructions__state" *ngIf="loading()">
@@ -20,12 +39,66 @@
         </div>
 
         <ng-container *ngIf="!loading() && !error()">
+            <ng-container *ngIf="isSearchActive(); else treeContent">
+                <div class="instructions__search-results">
+                    <div class="instructions__state" *ngIf="searchLoading()">
+                        Идет поиск...
+                    </div>
+                    <div class="instructions__state instructions__state--error"
+                        *ngIf="!searchLoading() && searchError() as searchErr">
+                        {{ searchErr }}
+                    </div>
+                    <ng-container *ngIf="!searchLoading() && !searchError()">
+                        <div class="instructions__state instructions__state--empty"
+                            *ngIf="!hasSearchResults() && hasItems()">
+                            Ничего не найдено.
+                        </div>
+                        <div class="instructions__state instructions__state--empty"
+                            *ngIf="!hasSearchResults() && !hasItems()">
+                            Нет доступных файлов для поиска.
+                        </div>
+                        <ng-container *ngIf="hasSearchResults()">
+                            <div class="instructions__search-group" *ngIf="searchNameResults().length">
+                                <div class="instructions__search-group-title">
+                                    Совпадения в названии
+                                </div>
+                                <ul class="instructions__search-list">
+                                    <li class="instructions__search-item"
+                                        *ngFor="let node of searchNameResults(); trackBy: trackByPath"
+                                        (click)="handleSearchResultClick(node)">
+                                        <span class="instructions__search-item-name"
+                                            [innerHTML]="highlightFileName(node.name)"></span>
+                                        <span class="instructions__search-item-path">{{ node.path }}</span>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="instructions__search-group" *ngIf="searchContentResults().length">
+                                <div class="instructions__search-group-title">
+                                    Найдено в содержимом
+                                </div>
+                                <ul class="instructions__search-list">
+                                    <li class="instructions__search-item instructions__search-item--snippet"
+                                        *ngFor="let match of searchContentResults(); trackBy: trackBySearchMatch"
+                                        (click)="handleSearchResultClick(match.node)">
+                                        <span class="instructions__search-item-name">{{ match.node.name }}</span>
+                                        <span class="instructions__search-item-snippet"
+                                            [innerHTML]="match.snippet"></span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </ng-container>
+                    </ng-container>
+                </div>
+            </ng-container>
+        </ng-container>
+
+        <ng-template #treeContent>
             <ul class="tree" *ngIf="hasItems(); else emptyState">
                 <ng-container *ngFor="let node of tree(); trackBy: trackByPath">
                     <ng-container *ngTemplateOutlet="treeNode; context: { $implicit: node }"></ng-container>
                 </ng-container>
             </ul>
-        </ng-container>
+        </ng-template>
 
         <ng-template #emptyState>
             <div class="instructions__state instructions__state--empty">
@@ -56,6 +129,30 @@
     </section>
 
     <section class="instructions__preview">
+        <div class="preview__toolbar">
+            <button type="button" class="instructions__button instructions__toggle-tree" (click)="toggleTreePanel()">
+                {{ treeCollapsed() ? 'Показать панель' : 'Скрыть панель' }}
+            </button>
+            <div class="preview__zoom-controls" role="group" aria-label="Управление масштабом">
+                <button type="button" class="preview__zoom-button" (click)="zoomOut()" [disabled]="!canZoomOut()">
+                    &minus;
+                </button>
+                <input type="range" class="preview__zoom-range" min="50" max="200" step="10"
+                    [value]="previewZoomPercent()" (input)="handleZoomSliderInput($event)"
+                    aria-label="Масштаб предпросмотра" />
+                <button type="button" class="preview__zoom-button" (click)="zoomIn()" [disabled]="!canZoomIn()">
+                    +
+                </button>
+                <button type="button" class="preview__zoom-button preview__zoom-reset" (click)="resetZoom()">
+                    100%
+                </button>
+                <span class="preview__zoom-value">{{ previewZoomPercent() }}%</span>
+            </div>
+            <div class="preview__hint">
+                <span class="preview__hint-label">Подсказка</span>
+                <span class="preview__hint-text">Shift + колесо мыши = горизонтальная прокрутка</span>
+            </div>
+        </div>
         <ng-container *ngIf="selected() as active; else previewHint">
             <header class="preview__header">
                 <div class="preview__meta">
@@ -63,8 +160,8 @@
                         {{ active.name }}
                     </div>
                     <div class="preview__details">
-                        <span *ngIf="formatSize(active.size) as size">Размер: {{ size }}</span>
-                        <span *ngIf="active.mime">Тип: {{ active.mime }}</span>
+                        <span *ngIf="formatSize(active.size) as size" class="preview__chip">Размер: {{ size }}</span>
+                        <span *ngIf="active.mime" class="preview__chip">Тип: {{ active.mime }}</span>
                     </div>
                 </div>
                 <div class="preview__actions" *ngIf="getSelectedDownloadUrl() as downloadUrl">
@@ -75,55 +172,61 @@
             </header>
 
             <div class="preview__body" *ngIf="previewState() as state" [attr.data-kind]="state.kind">
-                <div *ngIf="isLoadingState(state)" class="preview__placeholder">
-                    <p>{{ state.message }}</p>
-                </div>
+                <div class="preview__canvas">
+                    <div class="preview__canvas-content" [style.transform]="zoomTransform()"
+                        [style.width]="zoomFillPercent()" [style.minHeight]="zoomFillPercent()">
+                        <div *ngIf="isLoadingState(state)" class="preview__placeholder">
+                            <p>{{ state.message }}</p>
+                        </div>
 
-                <div *ngIf="isTextState(state)" class="preview__text">
-                    <pre>{{ state.content }}</pre>
-                </div>
+                        <div *ngIf="isTextState(state)" class="preview__text">
+                            <pre [innerHTML]="formatPreviewText(state.content)"></pre>
+                        </div>
 
-                <div *ngIf="isHtmlState(state)" class="preview__html">
-                    <div [innerHTML]="state.content"></div>
-                </div>
+                        <div *ngIf="isHtmlState(state)" class="preview__html">
+                            <div [innerHTML]="state.content"></div>
+                        </div>
 
-                <div *ngIf="isImageState(state)" class="preview__image">
-                    <img [src]="state.url" [alt]="state.alt" />
-                </div>
+                        <div *ngIf="isImageState(state)" class="preview__image">
+                            <img [src]="state.url" [alt]="state.alt" />
+                        </div>
 
-                <div *ngIf="isIframeState(state)" class="preview__frame-wrapper">
-                    <iframe [src]="state.url" title="Предпросмотр файла"></iframe>
-                </div>
+                        <div *ngIf="isIframeState(state)" class="preview__frame-wrapper">
+                            <iframe [src]="state.url" title="Предпросмотр документа"></iframe>
+                        </div>
 
-                <div *ngIf="isViewerState(state)" class="preview__doc-viewer">
-                    <ngx-doc-viewer [url]="state.url" [viewer]="state.viewer"></ngx-doc-viewer>
-                    <p class="preview__note" *ngIf="state.note">{{ state.note }}</p>
-                </div>
+                        <div *ngIf="isViewerState(state)" class="preview__doc-viewer">
+                            <ngx-doc-viewer [url]="state.url" [viewer]="state.viewer"></ngx-doc-viewer>
+                            <p class="preview__note" *ngIf="state.note">{{ state.note }}</p>
+                        </div>
 
-                <div *ngIf="isMessageState(state)" class="preview__placeholder">
-                    <p>{{ state.message }}</p>
-                    <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl" target="_blank"
-                        rel="noopener">
-                        Скачать файл
-                    </a>
-                    <a *ngIf="state.extraLink" class="instructions__button" [href]="state.extraLink.url" target="_blank"
-                        rel="noopener">
-                        {{ state.extraLink.label }}
-                    </a>
-                </div>
+                        <div *ngIf="isMessageState(state)" class="preview__placeholder">
+                            <p>{{ state.message }}</p>
+                            <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl" target="_blank"
+                                rel="noopener">
+                                ������ؐ��'�? �"�����>
+                            </a>
+                            <a *ngIf="state.extraLink" class="instructions__button" [href]="state.extraLink.url" target="_blank"
+                                rel="noopener">
+                                {{ state.extraLink.label }}
+                            </a>
+                        </div>
 
-                <div *ngIf="isErrorState(state)" class="preview__placeholder">
-                    <p>{{ state.message }}</p>
-                    <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl" target="_blank"
-                        rel="noopener">
-                        Скачать файл
-                    </a>
-                </div>
+                        <div *ngIf="isErrorState(state)" class="preview__placeholder">
+                            <p>{{ state.message }}</p>
+                            <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl" target="_blank"
+                                rel="noopener">
+                                ������ؐ��'�? �"�����>
+                            </a>
+                        </div>
 
-                <div *ngIf="isIdleState(state)" class="preview__placeholder">
-                    <p>Выберите файл слева, чтобы увидеть содержимое.</p>
+                        <div *ngIf="isIdleState(state)" class="preview__placeholder">
+                            <p>�'�<�+��?��'�� �"�����> �?�>��?��, �ؑ'�?�+�< �?�?��?��'�? �?�?�?��?�?�?�?�?��.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
+
         </ng-container>
 
         <ng-template #previewHint>
