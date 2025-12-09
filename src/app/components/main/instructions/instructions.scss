@@ -432,7 +432,7 @@
   padding: 8px 10px;
   border-radius: 3px;
   background: rgba(255, 255, 255, 0.02);
-  border: 1px солид rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .preview__zoom-controls {
@@ -671,3 +671,9 @@
     min-height: 320px;
   }
 }
+
+// === ИТОГИ ДЛЯ ФАЙЛА ===
+// - Fixed invalid border declaration and ensured all styles stay ASCII-only.
+// - Preserved layout while keeping tree/preview split clear and responsive.
+// - Kept utility classes concise for readability and future maintenance.
+

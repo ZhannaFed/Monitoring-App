@@ -5,7 +5,7 @@ import { forkJoin } from 'rxjs';
 import { CommonModule, NgFor } from '@angular/common';
 import { BytesToGbPipe } from "../../../pipes/bytes-to-gb.pipe";
 import { MatIcon, MatIconModule } from "@angular/material/icon";
-import { MOCK_HOST_DETAILS } from '../../../mocks/mock-hosts';
+import { MOCK_HOST_DETAILS, MOCK_HOSTS_BY_GROUP } from '../../../mocks/mock-hosts';
 
 interface DiskSpace {
   hostid: string;
@@ -20,6 +20,7 @@ interface DiskSpace {
 
 @Component({
   selector: 'app-host',
+  standalone: true,
   imports: [CommonModule, BytesToGbPipe, MatIcon, NgFor],
   templateUrl: './host.html',
   styleUrl: './host.scss'
@@ -35,9 +36,15 @@ export class Host implements OnInit {
   memoryUtil: any;
   opSystemInfo: any;
   hostname: any;
-  hostData: any;
+  hostData: any = {
+    id: '',
+    hostName: '',
+    ip: '',
+    desc: ''
+  };
   hostStatus: boolean = false;
-  diskSpaceTransformed: any;
+  diskSpaceTransformed: any = [];
+
   // TEST HOST DETAILS DATA ============================
   private readonly enableMockHostDetails = true;
   // TEST HOST DETAILS DATA ============================
@@ -51,71 +58,23 @@ export class Host implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    /*
-       this.diskSpace = [
-         {
-           hostid: "10652",
-           itemid: "48689",
-           lastvalue:"49748119552",
-           name: "FS [(C:)]: Space: Available"
-         },
-         {
-           hostid: "10652",
-           itemid: "48689",
-           lastvalue:"199536140288",
-           name: "FS [(C:)]: Space: Used"
-         },
-         {
-           hostid: "10652",
-          itemid: "48689",
-         lastvalue:"249284259840",
-        name: "FS [(C:)]: Space: Total"
-        },
-        {
-           hostid: "10652",
-           itemid: "48689",
-           lastvalue:"0",
-           name: "FS [WINSETUP(D:)]: Space: Available"
-         },
-         {
-           hostid: "10652",
-           itemid: "48689",
-           lastvalue:"0",
-           name: "FS [WINSETUP(D:)]: Space: Used"
-         },
-         {
-           hostid: "10652",
-          itemid: "48689",
-           lastvalue:"0",
-           name: "FS [WINSETUP(D:)]: Space: Total"
-         },
-       ]
-        this.diskSpaceTransformed = this.transformDiskSpace(this.diskSpace)
-       console.log(this.diskSpaceTransformed)
-       this.cpuUtil = [
-             {
-               lastvalue : 80.5
-             }
-       ]
-      this.memoryUtil = [
-             {
-               lastvalue : 50.78
-             }
-      ]
-  */
-
-    const navigation = window.history.state;
-    this.hostData = navigation.hostData;
-    console.log("get hostdata", this.hostData)
     this.route.paramMap.subscribe(params => {
       this.id = params.get('id');
-      // console.log(this.id);
+      console.log('Host ID from route:', this.id);
+
+      // Получить данные из state навигации через history
+      const state = window.history.state;
+      if (state?.hostData) {
+        this.hostData = state.hostData;
+        console.log('Host data from state:', this.hostData);
+      }
+
       if (this.enableMockHostDetails) {
         this.applyMockHostDetails();
       } else {
         this.getAllData();
       }
-    })
+    });
   }
 
   goBack() {
@@ -132,6 +91,15 @@ export class Host implements OnInit {
       this.memoryUtil = [];
       this.opSystemInfo = [];
       this.hostname = [];
+      const summary = this.getMockSummaryById(this.id);
+      if (summary) {
+        this.hostData = {
+          id: summary.hostid,
+          hostName: summary.host,
+          ip: summary.interfaces?.[0]?.ip ?? '',
+          desc: summary.description ?? ''
+        };
+      }
       return;
     }
 
@@ -141,6 +109,18 @@ export class Host implements OnInit {
     this.memoryUtil = [{ lastvalue: detail.memory }];
     this.opSystemInfo = [{ lastvalue: detail.os }];
     this.hostname = [{ lastvalue: detail.hostname }];
+
+    if (!this.hostData || !this.hostData.hostName) {
+      const summary = this.getMockSummaryById(this.id);
+      if (summary) {
+        this.hostData = {
+          id: detail.hostid,
+          hostName: summary.host ?? detail.hostname ?? this.id,
+          ip: summary.interfaces?.[0]?.ip ?? '',
+          desc: summary.description ?? ''
+        };
+      }
+    }
   }
   // TEST HOST DETAILS DATA ============================
 
@@ -268,6 +248,16 @@ export class Host implements OnInit {
     });
 
     return result;
+  }
+
+  private getMockSummaryById(hostid: string) {
+    for (const group of Object.values(MOCK_HOSTS_BY_GROUP)) {
+      const found = group.find((host) => host.hostid === hostid);
+      if (found) {
+        return found;
+      }
+    }
+    return undefined;
   }
 
 

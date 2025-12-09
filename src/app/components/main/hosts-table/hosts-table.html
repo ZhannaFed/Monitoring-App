@@ -78,11 +78,11 @@
     </div>
     
     <div class="remote-access">
-      <a [href]="'vnc://' + (host.interfaces[0]?.ip || '')" class="access-link">
+      <a [href]="'vnc://' + (host.interfaces[0]?.ip || '')" class="access-link" (click)="$event.stopPropagation()">
         <span class="material-icons">desktop_windows</span>
         VNC
       </a>
-      <a href="#" class="access-link">
+      <a href="#" class="access-link" (click)="$event.preventDefault(); $event.stopPropagation();">
         <span class="material-icons">settings_remote</span>
         Lite Manager
       </a>

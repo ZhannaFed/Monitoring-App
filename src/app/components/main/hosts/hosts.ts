@@ -10,6 +10,7 @@ import { MOCK_HOSTS_BY_GROUP } from '../../../mocks/mock-hosts';
 
 @Component({
   selector: 'app-hosts',
+  standalone: true,
   imports: [CommonModule, MatTableModule, MatTabsModule, HostsTable],
   templateUrl: './hosts.html',
   styleUrl: './hosts.scss'

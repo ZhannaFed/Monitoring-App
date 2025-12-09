@@ -1,122 +1,118 @@
-<!-- <p>host works!</p>
-<p><b>Host ID</b>{{diskSpace?.[0]?.hostid}}</p>
-<p ><b>{{diskSpace?.[0]?.name}}:</b>{{diskSpace?.[0]?.lastvalue}}</p> -->
+<!-- Host detail view redesigned for multi-card layout -->
+<a class="goBackLink" (click)="goBack()"><mat-icon>arrow_back</mat-icon>Назад</a>
 
-<a class="goBackLink"(click)="goBack()"><mat-icon>arrow_back</mat-icon>Назад</a>
+<div class="host-page">
+  <div class="host-grid">
+    <div class="host-card host-card--info">
+      <div class="host-mainInfo"> 
+          <div class="host-title-container">
+              <div class="host-title">
+              <span class="host-name">{{hostData?.hostName || '—'}}</span>
+              <span class="ip-address">
+                      <span class="material-icons">dns</span>
+                      {{ hostData?.ip || 'N/A' }}
+              </span>
+              </div>
+              <div 
+                  class="status-indicator" 
+                  [class.status-online]="hostStatus"
+                  [class.status-offline]="!hostStatus">
+              </div>
+          </div> 
+          <p class="host-description-block">{{hostData?.desc}}</p>
+      </div>
 
-
-<div class="host-card">
-<!-- <p>{{hostData.id}}</p> -->
-<div class="host-mainInfo"> 
-    <div class="host-title-container">
-        <div class="host-title">
-        <span class="host-name">{{hostData.hostName}}</span>
-        <span class="ip-address">
-                <span class="material-icons">dns</span>
-                {{ hostData.ip || 'N/A' }}
-        </span>
+      <div class="system-meta">
+        <div class="system-row">
+          <span class="system-label">System Info:</span>
+          <span class="system-value">{{opSystemInfo?.[0]?.lastvalue}}</span>
         </div>
-        <div 
-            class="status-indicator" 
-            [class.status-online]="hostStatus"
-            [class.status-offline]="!hostStatus">
+        <div class="system-row">
+          <span class="system-label">Hostname:</span>
+          <span class="system-value">{{hostname?.[0]?.lastvalue}}</span>
         </div>
-    </div> 
-    <p>{{hostData.desc}}</p>
-    </div>
-<!--  -->
-   <div class="disk-container">
-  <div *ngFor="let disk of diskSpaceTransformed" class="disk-card">
-    <!-- Compact Disk Header -->
-    <div class="disk-header">
-      <h3 class="disk-name">{{ disk.disk }}</h3>
-      <span class="disk-percentage">{{ disk.usedPercentage }}%</span>
-    </div>
-
-    <!-- Compact Progress Bar -->
-    <div class="progress-container">
-      <div class="progress-bar">
-        <div 
-          class="progress-used" 
-          [style.width.%]="disk.usedPercentage"
-          [class.low-usage]="disk.usedPercentage < 70"
-          [class.medium-usage]="disk.usedPercentage >= 70 && disk.usedPercentage < 90"
-          [class.high-usage]="disk.usedPercentage >= 90">
-        </div>
-        <div class="progress-available" [style.width.%]="disk.availablePercentage"></div>
       </div>
     </div>
 
-    <!-- Ultra Compact Statistics -->
-    <div class="disk-stats inline">
-      <div class="stat-item">
-        <span class="stat-label">Used</span>
-        <span class="stat-value">{{ disk.used | bytesToGb }}</span>
-        <span class="stat-percentage">{{ disk.usedPercentage }}%</span>
+    <div class="host-card host-card--metrics">
+      <div class="card-section">
+        <div class="disk-container">
+          <div *ngFor="let disk of diskSpaceTransformed" class="disk-card">
+            <div class="disk-header">
+              <h3 class="disk-name">Диск {{ disk.disk }}: {{ disk.usedPercentage }}%</h3>
+            </div>
+    
+            <div class="progress-container">
+              <div class="progress-bar">
+                <div 
+                  class="progress-used" 
+                  [style.width.%]="disk.usedPercentage"
+                  [class.low-usage]="disk.usedPercentage < 60"
+                  [class.medium-usage]="disk.usedPercentage >= 60 && disk.usedPercentage < 80"
+                  [class.high-usage]="disk.usedPercentage >= 80">
+                </div>
+                <div class="progress-available" [style.width.%]="disk.availablePercentage"></div>
+              </div>
+            </div>
+    
+            <div class="disk-stats inline">
+              <div class="stat-item">
+                <span class="stat-label">Всего</span>
+                <span class="stat-value">{{ disk.total | bytesToGb }}</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-label">Использовано</span>
+                <span class="stat-value">{{ disk.used | bytesToGb }}</span>
+                <span class="stat-percentage">{{ disk.usedPercentage }}%</span>
+              </div>
+              
+              <div class="stat-item">
+                <span class="stat-label">Доступно</span>
+                <span class="stat-value">{{ disk.available | bytesToGb }}</span>
+                <span class="stat-percentage">{{ disk.availablePercentage }}%</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      
-      <div class="stat-item">
-        <span class="stat-label">Free</span>
-        <span class="stat-value">{{ disk.available | bytesToGb }}</span>
-        <span class="stat-percentage">{{ disk.availablePercentage }}%</span>
+
+      <div class="card-section utilization-section">
+        <div class="utilization-item">
+          <div class="utilization-label-block">
+            <span class="utilization-label">Процессор</span>
+            <span class="utilization-value">{{cpuUtil?.[0]?.lastvalue | number: '1.1-1'}}%</span>
+          </div>
+          <span class="utilization-indicator"
+                [class.utilization-grey]="!cpuUtil?.[0]?.lastvalue && cpuUtil?.[0]?.lastvalue !== 0"
+                [class.utilization-low]="(cpuUtil?.[0]?.lastvalue || 0) < 60 && (cpuUtil?.[0]?.lastvalue || 0) > 0"
+                [class.utilization-medium]="(cpuUtil?.[0]?.lastvalue || 0) >= 60 && (cpuUtil?.[0]?.lastvalue || 0) < 80"
+                [class.utilization-high]="(cpuUtil?.[0]?.lastvalue || 0) >= 80">
+          </span>
+        </div>
+        
+        <div class="utilization-item">
+          <div class="utilization-label-block">
+            <span class="utilization-label">Память</span>
+            <span class="utilization-value">{{memoryUtil?.[0]?.lastvalue | number: '1.1-1'}}%</span>
+          </div>
+          <span class="utilization-indicator"
+                [class.utilization-grey]="!memoryUtil?.[0]?.lastvalue && memoryUtil?.[0]?.lastvalue !== 0"
+                [class.utilization-low]="(memoryUtil?.[0]?.lastvalue || 0) < 60 && (memoryUtil?.[0]?.lastvalue || 0) > 0"
+                [class.utilization-medium]="(memoryUtil?.[0]?.lastvalue || 0) >= 60 && (memoryUtil?.[0]?.lastvalue || 0) < 80"
+                [class.utilization-high]="(memoryUtil?.[0]?.lastvalue || 0) >= 80">
+          </span>
+        </div>
       </div>
-      
-      <div class="stat-item">
-        <span class="stat-label">Total</span>
-        <span class="stat-value">{{ disk.total | bytesToGb }}</span>
-      </div>
+    </div>
+
+    <div class="host-card host-card--backup">
+      <div class="card-section-title">Информация о бэкапах</div>
+      <div class="placeholder-block">—</div>
+    </div>
+
+    <div class="host-card host-card--test">
+      <div class="card-section-title">Тестовая карточка</div>
+      <p class="placeholder-block">Текст по умолчанию</p>
     </div>
   </div>
 </div>
-<!--  -->
-
-<!-- CPU and Memory Utilization with Status Indicators -->
-<div class="utilization-container">
-  <div class="utilization-item">
-    <span class="utilization-label">Процессор:</span>
-    <span class="utilization-value">{{cpuUtil?.[0]?.lastvalue | number: '1.1-1'}}%</span>
-    <span class="utilization-indicator"
-          [class.utilization-grey]="!cpuUtil?.[0]?.lastvalue && cpuUtil?.[0]?.lastvalue !== 0"
-          [class.utilization-low]="(cpuUtil?.[0]?.lastvalue || 0) < 70 && (cpuUtil?.[0]?.lastvalue || 0) > 0"
-          [class.utilization-medium]="(cpuUtil?.[0]?.lastvalue || 0) >= 70 && (cpuUtil?.[0]?.lastvalue || 0) < 90"
-          [class.utilization-high]="(cpuUtil?.[0]?.lastvalue || 0) >= 90">
-    </span>
-  </div>
-  
-  <div class="utilization-item">
-    <span class="utilization-label">Память:</span>
-    <span class="utilization-value">{{memoryUtil?.[0]?.lastvalue | number: '1.1-1'}}%</span>
-    <span class="utilization-indicator"
-          [class.utilization-grey]="!memoryUtil?.[0]?.lastvalue && memoryUtil?.[0]?.lastvalue !== 0"
-          [class.utilization-low]="(memoryUtil?.[0]?.lastvalue || 0) < 70 && (memoryUtil?.[0]?.lastvalue || 0) > 0"
-          [class.utilization-medium]="(memoryUtil?.[0]?.lastvalue || 0) >= 70 && (memoryUtil?.[0]?.lastvalue || 0) < 90"
-          [class.utilization-high]="(memoryUtil?.[0]?.lastvalue || 0) >= 90">
-    </span>
-  </div>
-</div>
-
-<!-- <p><b>CPU utilization:  </b>{{cpuUtil?.[0]?.lastvalue | number: '1.1-1'}}%</p>
-<p><b>Memory utilization:  </b>{{memoryUtil?.[0]?.lastvalue | number: '1.1-1'}}%</p> -->
-</div>
-
-<!-- <table>
-    <thead>
-        <tr>
-             <th>Host ID</th>
-            <th>Space</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let el of diskSpace">
-            <td>{{el.hostid}}</td>
-            <td><b>{{el.name}}: </b>{{el.lastvalue | bytesToGb}}</td>
-        </tr>
-    </tbody>
-</table> -->
-
-
-<p><b>System Info: </b>{{opSystemInfo?.[0]?.lastvalue}}</p>
-<p><b>Hostname: </b>{{hostname?.[0]?.lastvalue}}</p>
-
-
-

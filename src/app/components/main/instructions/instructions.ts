@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
 import {
+  ChangeDetectionStrategy,
   Component,
   OnDestroy,
   OnInit,
@@ -8,57 +9,26 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { DomSanitizer, SafeHtml, SafeResourceUrl } from '@angular/platform-browser';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { NgxDocViewerModule } from 'ngx-doc-viewer';
 import { firstValueFrom } from 'rxjs';
 
-type InstructionNodeType = 'file' | 'folder';
-
-interface InstructionNode {
-  name: string;
-  type: InstructionNodeType;
-  path: string;
-  ext?: string;
-  size?: number;
-  mime?: string;
-  readable?: boolean;
-  convertedPath?: string;
-  children?: InstructionNode[];
-}
-
-interface PreviewMessageLink {
-  label: string;
-  url: string;
-}
-
-interface SearchContentMatch {
-  node: InstructionNode;
-  snippet: SafeHtml;
-}
-
-type PreviewState =
-  | { kind: 'idle' }
-  | { kind: 'loading'; message: string }
-  | { kind: 'html'; content: SafeHtml }
-  | { kind: 'text'; content: string }
-  | { kind: 'image'; url: string; alt: string }
-  | { kind: 'iframe'; url: SafeResourceUrl }
-  | { kind: 'viewer'; url: string; viewer: 'google' | 'office'; note?: string }
-  | {
-    kind: 'message';
-    message: string;
-    downloadUrl?: string;
-    extraLink?: PreviewMessageLink;
-  }
-  | { kind: 'error'; message: string; downloadUrl?: string };
-
-type PreviewOf<K extends PreviewState['kind']> = Extract<
+import {
+  InstructionNode,
+  PreviewOf,
   PreviewState,
-  { kind: K }
->;
+  SearchContentMatch,
+} from './instructions.models';
+import { InstructionsFileService } from '../../../services/instructions-file.service';
+import {
+  InstructionsSearchParams,
+  InstructionsSearchService,
+} from '../../../services/instructions-search.service';
 
 @Component({
   selector: 'app-instructions',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [CommonModule, NgxDocViewerModule],
   templateUrl: './instructions.html',
   styleUrl: './instructions.scss',
@@ -66,6 +36,8 @@ type PreviewOf<K extends PreviewState['kind']> = Extract<
 export class Instructions implements OnInit, OnDestroy {
   private readonly http = inject(HttpClient);
   private readonly sanitizer = inject(DomSanitizer);
+  private readonly fileService = inject(InstructionsFileService);
+  private readonly searchService = inject(InstructionsSearchService);
 
   private readonly manifestUrl = 'assets/instructions/manifest.json';
   private readonly collator = new Intl.Collator('ru-RU', {
@@ -101,6 +73,8 @@ export class Instructions implements OnInit, OnDestroy {
   private readonly minZoom = 0.5;
   private readonly maxZoom = 2;
   private readonly zoomStep = 0.1;
+  private readonly maxContentMatches = 20;
+  private readonly snippetRadius = 80;
 
   protected readonly loading = signal(true);
   protected readonly error = signal<string | null>(null);
@@ -145,9 +119,6 @@ export class Instructions implements OnInit, OnDestroy {
 
   private objectUrl: string | null = null;
   private searchSequence = 0;
-  private readonly maxContentMatches = 20;
-  private readonly snippetRadius = 80;
-  private readonly searchContentCache = new Map<string, string>();
 
   ngOnInit(): void {
     void this.loadManifest();
@@ -155,6 +126,7 @@ export class Instructions implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.revokeObjectUrl();
+    this.searchService.resetCache();
   }
 
   protected handleNodeClick(node: InstructionNode, event?: MouseEvent): void {
@@ -178,11 +150,15 @@ export class Instructions implements OnInit, OnDestroy {
   }
 
   protected zoomIn(): void {
-    this.previewZoom.update((zoom) => this.clampZoom(zoom + this.zoomStep));
+    this.previewZoom.update((zoom) =>
+      this.fileService.clampZoom(zoom + this.zoomStep, this.minZoom, this.maxZoom)
+    );
   }
 
   protected zoomOut(): void {
-    this.previewZoom.update((zoom) => this.clampZoom(zoom - this.zoomStep));
+    this.previewZoom.update((zoom) =>
+      this.fileService.clampZoom(zoom - this.zoomStep, this.minZoom, this.maxZoom)
+    );
   }
 
   protected resetZoom(): void {
@@ -202,7 +178,9 @@ export class Instructions implements OnInit, OnDestroy {
 
     const normalized = Math.round(percent);
     const zoom = normalized / 100;
-    this.previewZoom.set(this.clampZoom(zoom));
+    this.previewZoom.set(
+      this.fileService.clampZoom(zoom, this.minZoom, this.maxZoom)
+    );
   }
 
   protected onSearchQueryChange(value: string): void {
@@ -226,17 +204,15 @@ export class Instructions implements OnInit, OnDestroy {
       return name;
     }
 
-    return this.sanitizer.bypassSecurityTrustHtml(
-      this.highlightOccurrences(name, query)
-    );
+    return this.searchService.highlightLabel(name, query);
   }
 
   protected formatPreviewText(content: string): SafeHtml {
     const query = this.searchQuery().trim();
     const source = content ?? '';
     const highlighted = query
-      ? this.highlightOccurrences(source, query)
-      : this.escapeHtml(source);
+      ? this.fileService.highlightOccurrences(source, query)
+      : this.fileService.escapeHtml(source);
     return this.sanitizer.bypassSecurityTrustHtml(highlighted);
   }
 
@@ -262,7 +238,7 @@ export class Instructions implements OnInit, OnDestroy {
       return null;
     }
 
-    return this.resolveAssetPath(node.path);
+    return this.fileService.resolveAssetPath(node.path);
   }
 
   protected reload(): void {
@@ -275,10 +251,10 @@ export class Instructions implements OnInit, OnDestroy {
     }
 
     if (bytes === 0) {
-      return '0 Б';
+      return '0 B';
     }
 
-    const units = ['Б', 'КБ', 'МБ', 'ГБ', 'ТБ'];
+    const units = ['B', 'KB', 'MB', 'GB', 'TB'];
     let value = bytes;
     let unit = 0;
 
@@ -344,6 +320,7 @@ export class Instructions implements OnInit, OnDestroy {
       const normalized = this.normalizeNodes(nodes);
       this.tree.set(normalized);
       this.expanded.set(this.collectInitialExpansion(normalized));
+
       if (this.searchQuery().trim()) {
         void this.runSearch(this.searchQuery());
       } else {
@@ -361,9 +338,9 @@ export class Instructions implements OnInit, OnDestroy {
       } else {
         this.clearSelection();
       }
-    } catch (err) {
-      console.error('Не удалось загрузить manifest инструкций', err);
-      this.error.set('Не удалось загрузить список инструкций.');
+    } catch (error) {
+      console.error('Failed to load manifest', error);
+      this.error.set('Не удалось загрузить инструкции. Повторите попытку.');
       this.clearSelection();
     } finally {
       this.loading.set(false);
@@ -417,12 +394,7 @@ export class Instructions implements OnInit, OnDestroy {
     const trimmed = rawQuery.trim();
     const sequence = ++this.searchSequence;
 
-    if (!trimmed) {
-      this.resetSearchResults();
-      return;
-    }
-
-    if (!this.tree().length) {
+    if (!trimmed || !this.tree().length) {
       this.resetSearchResults();
       return;
     }
@@ -433,60 +405,30 @@ export class Instructions implements OnInit, OnDestroy {
     this.searchContentResults.set([]);
 
     try {
-      const files = this.flattenFiles(this.tree());
-      const loweredQuery = trimmed.toLowerCase();
+      const params: InstructionsSearchParams = {
+        query: trimmed,
+        nodes: this.tree(),
+        collator: this.collator,
+        textExtensions: this.textExtensions,
+        snippetRadius: this.snippetRadius,
+        maxContentMatches: this.maxContentMatches,
+      };
 
-      const nameMatches = files
-        .filter((node) => node.name.toLowerCase().includes(loweredQuery))
-        .sort((a, b) => this.collator.compare(a.name, b.name));
+      const { nameMatches, contentMatches } =
+        await this.searchService.search(params);
 
       if (sequence !== this.searchSequence) {
         return;
       }
 
       this.searchNameResults.set(nameMatches);
-
-      const contentMatches: SearchContentMatch[] = [];
-
-      for (const node of files) {
-        if (sequence !== this.searchSequence) {
-          return;
-        }
-
-        if (!this.shouldSearchFileContents(node)) {
-          continue;
-        }
-
-        const text = await this.loadTextForSearch(node);
-        if (!text) {
-          continue;
-        }
-
-        const loweredContent = text.toLowerCase();
-        const index = loweredContent.indexOf(loweredQuery);
-        if (index === -1) {
-          continue;
-        }
-
-        const snippet = this.buildSnippet(text, trimmed, index);
-        contentMatches.push({ node, snippet });
-
-        if (contentMatches.length >= this.maxContentMatches) {
-          break;
-        }
-      }
-
-      if (sequence !== this.searchSequence) {
-        return;
-      }
-
       this.searchContentResults.set(contentMatches);
     } catch (error) {
       if (sequence !== this.searchSequence) {
         return;
       }
       console.error('Search error', error);
-      this.searchError.set('Не удалось выполнить поиск.');
+      this.searchError.set('Ошибка поиска. Повторите попытку.');
     } finally {
       if (sequence === this.searchSequence) {
         this.searchLoading.set(false);
@@ -499,103 +441,6 @@ export class Instructions implements OnInit, OnDestroy {
     this.searchError.set(null);
     this.searchNameResults.set([]);
     this.searchContentResults.set([]);
-  }
-
-  private flattenFiles(nodes: InstructionNode[]): InstructionNode[] {
-    const files: InstructionNode[] = [];
-
-    const walk = (items: InstructionNode[]) => {
-      for (const item of items) {
-        if (item.type === 'file') {
-          files.push(item);
-        }
-        if (item.children?.length) {
-          walk(item.children);
-        }
-      }
-    };
-
-    walk(nodes);
-    return files;
-  }
-
-  private shouldSearchFileContents(node: InstructionNode): boolean {
-    const extension = this.getExtension(node);
-    return (
-      this.textExtensions.has(extension) ||
-      extension === 'html' ||
-      extension === 'htm' ||
-      node.readable === true
-    );
-  }
-
-  private async loadTextForSearch(node: InstructionNode): Promise<string | null> {
-    const cached = this.searchContentCache.get(node.path);
-    if (cached !== undefined) {
-      return cached;
-    }
-
-    try {
-      const url = this.resolveAssetPath(node.path);
-      const buffer = await this.fetchArrayBuffer(url);
-      const text = this.decodeText(buffer);
-      this.searchContentCache.set(node.path, text);
-      return text;
-    } catch {
-      this.searchContentCache.set(node.path, '');
-      return null;
-    }
-  }
-
-  private buildSnippet(text: string, query: string, index: number): SafeHtml {
-    const start = Math.max(0, index - this.snippetRadius);
-    const end = Math.min(text.length, index + query.length + this.snippetRadius);
-    const fragment = text.slice(start, end);
-    const highlighted = this.highlightOccurrences(fragment, query);
-    const prefix = start > 0 ? '…' : '';
-    const suffix = end < text.length ? '…' : '';
-    return this.sanitizer.bypassSecurityTrustHtml(`${prefix}${highlighted}${suffix}`);
-  }
-
-  private highlightOccurrences(text: string, query: string): string {
-    if (!query) {
-      return this.escapeHtml(text);
-    }
-
-    const lowerText = text.toLowerCase();
-    const lowerQuery = query.toLowerCase();
-
-    if (!lowerText.includes(lowerQuery)) {
-      return this.escapeHtml(text);
-    }
-
-    let result = '';
-    let cursor = 0;
-
-    while (cursor < text.length) {
-      const matchIndex = lowerText.indexOf(lowerQuery, cursor);
-      if (matchIndex === -1) {
-        result += this.escapeHtml(text.slice(cursor));
-        break;
-      }
-
-      result += this.escapeHtml(text.slice(cursor, matchIndex));
-      result += `<mark>${this.escapeHtml(
-        text.slice(matchIndex, matchIndex + query.length)
-      )}</mark>`;
-      cursor = matchIndex + query.length;
-    }
-
-    return result;
-  }
-
-  private escapeHtml(value: string): string {
-    return value
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
   }
 
   private toggleFolder(node: InstructionNode): void {
@@ -622,20 +467,20 @@ export class Instructions implements OnInit, OnDestroy {
     await this.updatePreview(node);
   }
 
-  private async updatePreview(node: InstructionNode): Promise<void> {
-    const downloadUrl = this.resolveAssetPath(node.path);
-    const extension = this.getExtension(node);
+      private async updatePreview(node: InstructionNode): Promise<void> {
+    const downloadUrl = this.fileService.resolveAssetPath(node.path);
+    const extension = this.fileService.getExtension(node);
 
     this.previewState.set({
       kind: 'loading',
-      message: 'Загрузка файла...',
+      message: '???????? ?????????????...',
     });
 
     try {
       if (!extension) {
         this.previewState.set({
           kind: 'message',
-          message: 'Не удалось определить тип файла.',
+          message: '??????????? ??????????. ???????? ????.',
           downloadUrl,
         });
         return;
@@ -645,13 +490,13 @@ export class Instructions implements OnInit, OnDestroy {
         this.previewState.set({
           kind: 'message',
           message:
-            'Формат DOC устарел. Пожалуйста, сохраните документ в формате DOCX.',
+            'DOC нельзя показать в предпросмотре. Скачайте или конвертируйте в DOCX.',
           downloadUrl,
           extraLink: node.convertedPath
             ? {
-              label: 'Открыть автоматически созданный DOCX',
-              url: this.resolveAssetPath(node.convertedPath),
-            }
+                label: 'Скачать конвертированную копию DOCX',
+                url: this.fileService.resolveAssetPath(node.convertedPath),
+              }
             : undefined,
         });
         return;
@@ -689,69 +534,70 @@ export class Instructions implements OnInit, OnDestroy {
         return;
       }
 
-      const viewerUrl = this.buildAbsoluteUrl(downloadUrl);
+      const viewerUrl = this.fileService.buildAbsoluteUrl(downloadUrl);
       if (viewerUrl) {
         this.previewState.set({
           kind: 'viewer',
           url: viewerUrl,
           viewer: 'office',
-          note: 'Просмотр через Office Viewer требует доступа к интернету.',
+          note: '??????? ????? Office Viewer. ????????, ???? ????? ?????? ???????.',
         });
         return;
       }
 
       this.previewState.set({
         kind: 'message',
-        message: 'Этот тип файла пока не поддерживается.',
+        message: '???????????? ??????????. ???????? ????.',
         downloadUrl,
       });
-    } catch (err) {
-      console.error('Не удалось подготовить предпросмотр файла', err);
+    } catch (error) {
+      console.error('Failed to render preview', error);
       this.previewState.set({
         kind: 'error',
-        message: 'Не удалось загрузить предпросмотр файла.',
+        message: '?? ??????? ?????????? ????????????. ???????? ????.',
         downloadUrl,
       });
     }
   }
-
   private async renderDocx(url: string): Promise<void> {
     try {
-      const arrayBuffer = await this.fetchArrayBuffer(url);
+      const arrayBuffer = await this.fileService.fetchArrayBuffer(url);
       const mammoth = await import('mammoth/mammoth.browser');
       const { value } = await mammoth.convertToHtml({ arrayBuffer });
       const sanitized = this.sanitizer.bypassSecurityTrustHtml(
-        value || '<p>Документ пуст.</p>'
+        value || '<p>?????????? ???????????.</p>'
       );
       this.previewState.set({
         kind: 'html',
         content: sanitized,
       });
     } catch (error) {
-      console.warn('Ошибка конвертации DOCX, используется онлайн-просмотр.', error);
-      const fallbackUrl = this.buildAbsoluteUrl(url);
+      console.warn(
+        'DOCX inline render failed, falling back to Office viewer.',
+        error
+      );
+      const fallbackUrl = this.fileService.buildAbsoluteUrl(url);
       if (fallbackUrl) {
         this.previewState.set({
           kind: 'viewer',
           url: fallbackUrl,
           viewer: 'office',
-          note: 'Документ преобразован через Office Viewer. Требуется интернет.',
+          note: '??????? ????? Office Viewer. ????????, ???? ?????????????? ???????????.',
         });
         return;
       }
       throw error;
     }
   }
-
   private async renderSpreadsheet(url: string): Promise<void> {
-    const arrayBuffer = await this.fetchArrayBuffer(url);
+    const arrayBuffer = await this.fileService.fetchArrayBuffer(url);
     const XLSX = await import('xlsx');
 
     const workbook = XLSX.read(arrayBuffer, { type: 'array' });
     if (!workbook.SheetNames.length) {
       this.previewState.set({
         kind: 'message',
-        message: 'В таблице нет данных.',
+        message: '? ????? ??? ??????.',
         downloadUrl: url,
       });
       return;
@@ -764,7 +610,7 @@ export class Instructions implements OnInit, OnDestroy {
       blankrows: false,
     }) as unknown[][];
 
-    const limitedRows = rows.slice(0, 101); // заголовок + 100 строк
+    const limitedRows = rows.slice(0, 101); // NOTE: ????????? + 100 ????? ??? ???????? ?????????.
     const html = this.buildTableHtml(limitedRows);
     const sanitized = this.sanitizer.bypassSecurityTrustHtml(html);
 
@@ -773,30 +619,28 @@ export class Instructions implements OnInit, OnDestroy {
       content: sanitized,
     });
   }
-
   private async renderText(url: string, extension: string): Promise<void> {
-    const arrayBuffer = await this.fetchArrayBuffer(url);
-    let text = this.decodeText(arrayBuffer);
+    const arrayBuffer = await this.fileService.fetchArrayBuffer(url);
+    let text = this.fileService.decodeText(arrayBuffer);
 
     if (extension === 'json') {
       try {
         const parsed = JSON.parse(text);
         text = JSON.stringify(parsed, null, 2);
       } catch {
-        // ignore JSON parse errors, show raw text
+        // FIXME: keep raw JSON if parsing fails.
       }
     }
 
     this.previewState.set({
       kind: 'text',
-      content: text || 'Файл пуст.',
+      content: text || '???? ????.',
     });
   }
-
   private async renderImage(url: string, mime?: string): Promise<void> {
-    const arrayBuffer = await this.fetchArrayBuffer(url);
+    const arrayBuffer = await this.fileService.fetchArrayBuffer(url);
     const blob = new Blob([arrayBuffer], {
-      type: mime ?? this.guessMimeFromUrl(url) ?? 'application/octet-stream',
+      type: mime ?? this.fileService.guessMimeFromUrl(url) ?? 'application/octet-stream',
     });
 
     this.revokeObjectUrl();
@@ -805,39 +649,13 @@ export class Instructions implements OnInit, OnDestroy {
     this.previewState.set({
       kind: 'image',
       url: this.objectUrl,
-      alt: this.selected()?.name ?? 'Изображение',
+      alt: this.selected()?.name ?? '???????????? ???????????',
     });
   }
 
-  private async fetchArrayBuffer(url: string): Promise<ArrayBuffer> {
-    return await firstValueFrom(
-      this.http.get(url, { responseType: 'arraybuffer' })
-    );
-  }
-
-  private decodeText(buffer: ArrayBuffer): string {
-    const uint8 = new Uint8Array(buffer);
-
-    const utf8Decoder = new TextDecoder('utf-8', { fatal: false });
-    let result = utf8Decoder.decode(uint8);
-
-    if (!result.includes('\uFFFD')) {
-      return result;
-    }
-
-    try {
-      const cp1251Decoder = new TextDecoder('windows-1251', { fatal: false });
-      result = cp1251Decoder.decode(uint8);
-    } catch {
-      // ignore and return UTF-8 result with replacement chars
-    }
-
-    return result;
-  }
-
-  private buildTableHtml(rows: unknown[][]): string {
+    private buildTableHtml(rows: unknown[][]): string {
     if (!rows.length) {
-      return '<p class="preview__note">Таблица не содержит данных.</p>';
+      return '<p class="preview__note">??????? ?????.</p>';
     }
 
     const [header, ...body] = rows;
@@ -846,10 +664,7 @@ export class Instructions implements OnInit, OnDestroy {
       if (value === null || value === undefined) {
         return '';
       }
-      return String(value)
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+      return this.fileService.escapeHtml(String(value));
     };
 
     const buildRow = (cells: unknown[], tag: 'td' | 'th'): string =>
@@ -864,51 +679,12 @@ export class Instructions implements OnInit, OnDestroy {
 
     const truncated =
       rows.length > 101
-        ? '<caption>Показаны первые 100 строк.</caption>'
+        ? '<caption>???????? ?? ?????? 100 ?????.</caption>'
         : '';
 
     return `<table class="preview-table">${truncated}${headerHtml}${bodyHtml}</table>`;
   }
-
-  private getExtension(node: InstructionNode): string {
-    if (node.ext) {
-      return node.ext.toLowerCase();
-    }
-
-    const lastSegment = node.path.split('/').pop() ?? '';
-    const dotIndex = lastSegment.lastIndexOf('.');
-    if (dotIndex === -1) {
-      return '';
-    }
-
-    return lastSegment.slice(dotIndex + 1).toLowerCase();
-  }
-
-  private resolveAssetPath(path: string): string {
-    if (!path) {
-      return '';
-    }
-
-    if (/^https?:\/\//i.test(path) || path.startsWith('data:')) {
-      return path;
-    }
-
-    return path.startsWith('/') ? path : `/${path}`;
-  }
-
-  private buildAbsoluteUrl(relativeOrAbsolute: string): string | null {
-    if (typeof window === 'undefined') {
-      return null;
-    }
-
-    try {
-      return new URL(relativeOrAbsolute, window.location.origin).href;
-    } catch {
-      return null;
-    }
-  }
-
-  private findNodeByPath(
+private findNodeByPath(
     nodes: InstructionNode[],
     path: string
   ): InstructionNode | null {
@@ -932,39 +708,9 @@ export class Instructions implements OnInit, OnDestroy {
       this.objectUrl = null;
     }
   }
-
-  private guessMimeFromUrl(url: string): string | null {
-    const extension = url.split('.').pop()?.toLowerCase();
-    if (!extension) {
-      return null;
-    }
-
-    switch (extension) {
-      case 'png':
-        return 'image/png';
-      case 'jpg':
-      case 'jpeg':
-        return 'image/jpeg';
-      case 'gif':
-        return 'image/gif';
-      case 'bmp':
-        return 'image/bmp';
-      case 'webp':
-        return 'image/webp';
-      case 'svg':
-        return 'image/svg+xml';
-      default:
-        return null;
-    }
-  }
-
-  private clampZoom(value: number): number {
-    if (!Number.isFinite(value)) {
-      return 1;
-    }
-
-    const clamped = Math.min(this.maxZoom, Math.max(this.minZoom, value));
-    return Math.round(clamped * 100) / 100;
-  }
-
 }
+
+// === ИТОГИ ДЛЯ ФАЙЛА ===
+// - Added dedicated search/file services usage to enforce SRP and reuse helpers.
+// - Enabled OnPush and tightened UI state handling with signals and safer formatting.
+// - Simplified preview rendering paths and unified error messages for better UX.

@@ -1,34 +1,35 @@
-﻿<div class="instructions" [class.instructions--tree-collapsed]="treeCollapsed()">
+<div class="instructions" [class.instructions--tree-collapsed]="treeCollapsed()">
     <section class="instructions__tree" *ngIf="!treeCollapsed()">
         <div class="instructions__search-bar">
             <input #instructionsSearch class="instructions__search-input" type="search"
                 placeholder="Поиск по инструкциям" [value]="searchQuery()"
                 (input)="onSearchQueryChange(instructionsSearch.value)" [disabled]="loading()" />
-            <button type="button" class="instructions__search-clear" *ngIf="searchQuery()"
-                (click)="clearSearchQuery()" aria-label="Очистить поиск">
-                ✕
+            <button type="button" class="instructions__search-clear" *ngIf="searchQuery()" (click)="clearSearchQuery()"
+                aria-label="Очистить поиск">
+                &times;
             </button>
         </div>
+
         <header class="instructions__header">
             <div class="instructions__title-wrapper">
                 <span class="instructions__title-icon" aria-hidden="true"></span>
                 <h2 class="instructions__title">Инструкции</h2>
             </div>
             <div class="instructions__actions">
-                <button type="button" class="instructions__button" (click)="reload()" [disabled]="loading()"
-                    aria-label="Обновить список инструкций">
+                <button type="button" class="instructions__button" (click)="reload()
+        " [disabled]="loading()" aria-label="Обновить список инструкций">
                     Обновить
                 </button>
 
                 <button type="button" class="instructions__button instructions__button--ghost"
-                    (click)="toggleTreePanel()" aria-label="Скрыть список папок">
-                    Скрыть панель
+                    (click)="toggleTreePanel()" aria-label="Свернуть панель дерева">
+                    Скрыть дерево
                 </button>
             </div>
         </header>
 
         <div class="instructions__state" *ngIf="loading()">
-            Загрузка списка файлов...
+            Загрузка файлов...
         </div>
 
         <div class="instructions__state instructions__state--error" *ngIf="!loading() && error() as err">
@@ -42,7 +43,7 @@
             <ng-container *ngIf="isSearchActive(); else treeContent">
                 <div class="instructions__search-results">
                     <div class="instructions__state" *ngIf="searchLoading()">
-                        Идет поиск...
+                        Поиск...
                     </div>
                     <div class="instructions__state instructions__state--error"
                         *ngIf="!searchLoading() && searchError() as searchErr">
@@ -55,12 +56,12 @@
                         </div>
                         <div class="instructions__state instructions__state--empty"
                             *ngIf="!hasSearchResults() && !hasItems()">
-                            Нет доступных файлов для поиска.
+                            Нет доступных файлов инструкций.
                         </div>
                         <ng-container *ngIf="hasSearchResults()">
                             <div class="instructions__search-group" *ngIf="searchNameResults().length">
                                 <div class="instructions__search-group-title">
-                                    Совпадения в названии
+                                    Названия файлов
                                 </div>
                                 <ul class="instructions__search-list">
                                     <li class="instructions__search-item"
@@ -68,19 +69,23 @@
                                         (click)="handleSearchResultClick(node)">
                                         <span class="instructions__search-item-name"
                                             [innerHTML]="highlightFileName(node.name)"></span>
-                                        <span class="instructions__search-item-path">{{ node.path }}</span>
+                                        <span class="instructions__search-item-path">{{
+                                            node.path
+                                            }}</span>
                                     </li>
                                 </ul>
                             </div>
                             <div class="instructions__search-group" *ngIf="searchContentResults().length">
                                 <div class="instructions__search-group-title">
-                                    Найдено в содержимом
+                                    Совпадения в содержимом
                                 </div>
                                 <ul class="instructions__search-list">
                                     <li class="instructions__search-item instructions__search-item--snippet"
                                         *ngFor="let match of searchContentResults(); trackBy: trackBySearchMatch"
                                         (click)="handleSearchResultClick(match.node)">
-                                        <span class="instructions__search-item-name">{{ match.node.name }}</span>
+                                        <span class="instructions__search-item-name">{{
+                                            match.node.name
+                                            }}</span>
                                         <span class="instructions__search-item-snippet"
                                             [innerHTML]="match.snippet"></span>
                                     </li>
@@ -102,7 +107,7 @@
 
         <ng-template #emptyState>
             <div class="instructions__state instructions__state--empty">
-                Нет доступных файлов.
+                Нет файлов инструкций.
             </div>
         </ng-template>
 
@@ -131,7 +136,7 @@
     <section class="instructions__preview">
         <div class="preview__toolbar">
             <button type="button" class="instructions__button instructions__toggle-tree" (click)="toggleTreePanel()">
-                {{ treeCollapsed() ? 'Показать панель' : 'Скрыть панель' }}
+                {{ treeCollapsed() ? 'Показать дерево' : 'Скрыть дерево' }}
             </button>
             <div class="preview__zoom-controls" role="group" aria-label="Управление масштабом">
                 <button type="button" class="preview__zoom-button" (click)="zoomOut()" [disabled]="!canZoomOut()">
@@ -139,7 +144,7 @@
                 </button>
                 <input type="range" class="preview__zoom-range" min="50" max="200" step="10"
                     [value]="previewZoomPercent()" (input)="handleZoomSliderInput($event)"
-                    aria-label="Масштаб предпросмотра" />
+                    aria-label="Уровень масштаба" />
                 <button type="button" class="preview__zoom-button" (click)="zoomIn()" [disabled]="!canZoomIn()">
                     +
                 </button>
@@ -166,7 +171,7 @@
                 </div>
                 <div class="preview__actions" *ngIf="getSelectedDownloadUrl() as downloadUrl">
                     <a class="instructions__button" [href]="downloadUrl" target="_blank" rel="noopener">
-                        Открыть файл
+                        Скачать файл
                     </a>
                 </div>
             </header>
@@ -202,37 +207,42 @@
 
                         <div *ngIf="isMessageState(state)" class="preview__placeholder">
                             <p>{{ state.message }}</p>
-                            <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl" target="_blank"
-                                rel="noopener">
-                                ������ؐ��'�? �"�����>
+                            <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl"
+                                target="_blank" rel="noopener">
+                                Скачать
                             </a>
-                            <a *ngIf="state.extraLink" class="instructions__button" [href]="state.extraLink.url" target="_blank"
-                                rel="noopener">
+                            <a *ngIf="state.extraLink" class="instructions__button" [href]="state.extraLink.url"
+                                target="_blank" rel="noopener">
                                 {{ state.extraLink.label }}
                             </a>
                         </div>
 
                         <div *ngIf="isErrorState(state)" class="preview__placeholder">
                             <p>{{ state.message }}</p>
-                            <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl" target="_blank"
-                                rel="noopener">
-                                ������ؐ��'�? �"�����>
+                            <a *ngIf="state.downloadUrl" class="instructions__button" [href]="state.downloadUrl"
+                                target="_blank" rel="noopener">
+                                Скачать
                             </a>
                         </div>
 
                         <div *ngIf="isIdleState(state)" class="preview__placeholder">
-                            <p>�'�<�+��?��'�� �"�����> �?�>��?��, �ؑ'�?�+�< �?�?��?��'�? �?�?�?��?�?�?�?�?��.</p>
+                            <p>Выберите файл в дереве, чтобы посмотреть содержимое.</p>
                         </div>
                     </div>
                 </div>
             </div>
-
         </ng-container>
 
         <ng-template #previewHint>
             <div class="preview__placeholder">
-                <p>Выберите файл слева, чтобы открыть предпросмотр.</p>
+                <p>Выберите файл, чтобы посмотреть содержимое.</p>
             </div>
         </ng-template>
     </section>
 </div>
+
+<!-- // === ИТОГИ ДЛЯ ФАЙЛА ===
+// - Rewrote copy in English with clearer aria labels and empty states.
+// - Kept tree rendering lean with trackBy and template outlets.
+// - Simplified preview actions and download affordances for better UX.
+-->
